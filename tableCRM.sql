@@ -89,10 +89,10 @@ insert into cusService (nama) select  'Tom'
 insert into cusService (nama) select  'Jerry'
 
 
-insert into hubungan(idKK,posisi) select   1, 'ayah'
-insert into hubungan (idKK,posisi) select  1, 'ibu'
-insert into hubungan (idKK,posisi) select  2, 'ayah'
-insert into hubungan (idKK,posisi) select  2, 'ibu'
+insert into hubungan(idKK, idUser, posisi) select  1, 1, 'ayah'
+insert into hubungan (idKK,idUser, posisi) select  1, 2, 'ibu'
+insert into hubungan (idKK,idUser, posisi) select  2, 3, 'ayah'
+insert into hubungan (idKK,idUser, posisi) select  2, 4, 'ibu'
 
 insert into region (namaKelompok, idParent) select 'Jawa Barat', 1
 insert into region (namaKelompok, idParent) select  'Sumatera uUtara', 2
@@ -107,7 +107,6 @@ insert into perubahan (waktu, fkInvest, operasi) select  '20190401 10:10:10 AM',
 
 insert into history (fkPerubahan, kolom, tipeData, nilaiSebelum) select  1, 'nominal', 'money', '100000'
 insert into history (fkPerubahan, kolom, tipeData, nilaiSebelum) select  3, 'nominal', 'money', '50000'
-
 
 
 
