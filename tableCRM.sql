@@ -36,7 +36,7 @@ create table [hubungan](
 	[idH] [int]  IDENTITY(1,1) PRIMARY KEY,
 	[idKK] [int] NOT NULL,
 	[idUser] [int] NOT NULL,
-	[posisi] [varchar] (10) NOT NULL
+	[posisi] [varchar] (20) NOT NULL
 )
 
 create table [region](
@@ -120,7 +120,7 @@ insert into hubungan (idKK,idUser, posisi) select 6, 9, 'anak kedua'
 insert into hubungan (idKK,idUser, posisi) select 2, 10, 'ayah'
 
 --anggap parent root adalah Indonesia
-insert into region (namaKelompok, idParent) select 'Indonesia', NULL
+insert into region (namaKelompok, idParent) select 'Indonesia', 0
 insert into region (namaKelompok, idParent) select 'Jawa Barat', 1
 insert into region (namaKelompok, idParent) select 'Sumatera uUtara', 2
 insert into region (namaKelompok, idParent) select 'Jakarta', 1
