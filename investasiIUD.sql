@@ -1,15 +1,7 @@
 ALTER PROCEDURE investasiDelete(
-	@namaKlien varchar(50)
+	@idKlien int
 )
 AS
-	declare @idKlien int
-	select
-		@idKlien=idK
-	from
-		klien
-	where
-		klien.nama = @namaKlien
-
 	declare @curDateTime datetime
 	select
 		@curDateTime = GETDATE()
@@ -105,7 +97,7 @@ END
 
 --update dapat dilakukan lebih dari dua kali
 ALTER PROCEDURE investasiUpdate(
-	@namaklien varchar(50),
+	@IdKlien varchar(50),
 	@nominal money,
 	@fkCusSer int
 )
@@ -114,15 +106,6 @@ AS
 	declare @curDate datetime
 	select 
 		@curDate = GETDATE()
-	
-	--untuk mendapatkan idKlien dari namaKlien yang di input
-	declare @idKlien int
-	select
-		@idKlien=idK
-	from
-		klien
-	where
-		klien.nama = @namaklien
 
 	declare @idInv int --idInvestasi yang baru dimasukkan
 	declare @idPerubahan int --idPerubahan terakhir
@@ -201,20 +184,11 @@ BEGIN
 END
 
 ALTER PROCEDURE investasiInsert(
-	@namaKlien varchar(50),
+	@idKlien varchar(50),
 	@nominal money,
 	@cusSer int
 )
 AS
-	--untuk mendapatkan idKlien setelah namaKlien di input
-	declare @idKlien int
-	select
-		@idKlien=idK
-	from
-		klien
-	where
-		klien.nama = @namaKlien
-
 	--untuk mengambil waktu saat ini
 	declare @curDateTime datetime
 	select
