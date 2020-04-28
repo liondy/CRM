@@ -1,27 +1,131 @@
-alter procedure insertCS(
-	@nama varchar(15),
-	@StatementType nvarchar(20) = '' 
-)
-as
+/*
+	Stored Procedure untuk mengupdate data customer service
+	SP ini dapat menambah atau menghapus list customer service
+	param: @nama: nama customer service yang ingin ditambah atau dihapus
+	param: @operasi: tambah atau hapus
+*/
+ALTER PROCEDURE updateCustomerService
+	@nama varchar(50),
+	@operasi varchar(20)
+AS
+	DECLARE 
+		@op varchar(20),
+		@curDate datetime,
+		@idRecord int,
+		@idPerubahan int,
+		@idC int
+	SET @op = UPPER(@operasi)
+	SET @curDate = GETDATE()
+	IF @op = 'TAMBAH'
 	BEGIN
-		IF @StatementType = 'insert'  
-		BEGIN  
-			insert into cusService(nama) values(@nama)  
-		END  
+		SET @idC = (
+			SELECT
+				idC
+			FROM
+				CusService
+			WHERE
+				nama = @nama
+		)
+
+		IF @idC is NULL
+		BEGIN
+			INSERT INTO cusService(nama)
+			VALUES(@nama)
+
+			SET @idRecord = (
+				SELECT
+					idC
+				FROM
+					CusService
+				WHERE
+					nama = @nama
+			)
+
+			INSERT INTO Perubahan(waktu, tabel, idRecord, operasi)
+			VALUES(@curDate, 'CusService', @idRecord, 'INSERT')
+
+			SET @idPerubahan = (
+				SELECT
+					idPe
+				FROM
+					Perubahan
+				WHERE
+					idRecord = @idRecord AND
+					tabel = 'CusService' AND
+					operasi = 'INSERT'
+			)
+
+			INSERT INTO History(fkPerubahan, kolom, tipeData, nilaiSebelum)
+			VALUES(@idPerubahan,'nama','varchar(50)','')
+		END
+	END
+	ELSE IF @op = 'HAPUS'
+	BEGIN
+		SET @idC = (
+			SELECT
+				idC
+			FROM
+				CusService
+			WHERE
+				nama = @nama
+		)
+
+		IF @idC IS NOT NULL
+		BEGIN
+			SET @idRecord = (
+				SELECT
+					idC
+				FROM
+					CusService
+				WHERE
+					nama = @nama
+			)
+
+			INSERT INTO Perubahan(waktu, tabel, idRecord, operasi)
+			VALUES(@curDate, 'CusService', @idRecord, 'DELETE')
+
+			SET @idPerubahan = (
+				SELECT
+					idPe
+				FROM
+					Perubahan
+				WHERE
+					idRecord = @idRecord AND
+					tabel = 'CusService' AND
+					operasi = 'DELETE'
+			)
+
+			INSERT INTO History(fkPerubahan, kolom, tipeData, nilaiSebelum)
+			VALUES(@idPerubahan,'nama','varchar(50)',@nama)
+
+			DELETE FROM cusService
+			WHERE nama = @nama
+		END
 	END
 
--------------------------------------------------------------------------
-alter procedure deleteNama(
-	@idname int,
-	@StatementType nvarchar(20) = '' 
-)
-as
-	begin IF @StatementType = 'delete' 
-		BEGIN  
-		DELETE FROM  
-			cusService  
-		WHERE  
-		idC = @idname 
-		END 
-	end
+	SELECT
+		idC AS 'Id CS',
+		nama AS 'Nama CS'
+	FROM
+		CusService
 
+	SELECT
+		idPe AS 'id Perubahan',
+		waktu,
+		tabel,
+		idRecord AS 'id CS',
+		operasi
+	FROM
+		Perubahan
+	WHERE 
+		tabel = 'CusService'
+
+	SELECT
+		fkPerubahan AS 'id Perubahan',
+		kolom,
+		nilaiSebelum AS 'Data CS Sebelum'
+	FROM history where kolom = 'nama'
+GO
+--param pertama: nama
+--param kedua: hapus atau tambah
+EXEC updateCustomerService 'Tom','tmabah'

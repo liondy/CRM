@@ -1,6 +1,5 @@
 drop table klien
-drop table noHpklien 
-drop table telepon
+drop table noHpklien
 drop table cusService
 drop table hubungan
 drop table region
@@ -59,14 +58,14 @@ create table [perubahan](
 	[waktu] [datetime] NOT NULL,
 	[tabel] [varchar](10) NOT NULL,
 	[idRecord] [int] NOT NULL, --awalnya fkInvest
-	[operasi] [int] NOT NULL
+	[operasi] [varchar](20) NOT NULL
 )
 
 create table [history](
 	[idH] [int] IDENTITY(1,1) PRIMARY KEY,
 	[fkPerubahan] [int] NOT NULL,
-	[kolom] [varchar] (20) NOT NULL,
-	[tipeData] [varchar] (10) NOT NULL,
+	[kolom] [varchar] (50) NOT NULL,
+	[tipeData] [varchar] (50) NOT NULL,
 	[nilaiSebelum] [varchar] (50) NOT NULL
 )
 
