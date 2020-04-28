@@ -40,6 +40,7 @@ create table [cusService](
 create table [hubungan](
 	[idH] [int]  IDENTITY(1,1) PRIMARY KEY,
 	[idKK] [int] NOT NULL,
+	[idUser] [int] NOT NULL,
 	[posisi] [varchar] (10) NOT NULL
 )
 
