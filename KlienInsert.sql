@@ -4,13 +4,14 @@
 --select * from region
 --select * from hubungan
 CREATE PROCEDURE KlienInsert(
-@nama varchar(50),
-@alamat varchar(50),
-@tgllahir datetime,
-@namaRegion varchar(50),
-@hubungan int,
-@status int,
-@email varchar(50)
+	@nama varchar(50),
+	@alamat varchar(50),
+	@tgllahir datetime,
+	@namaRegion varchar(50),
+	@hubungan int,
+	@status int,
+	@email varchar(50),
+	@nohp varchar(50)
 )
 AS
 	declare @reg int
@@ -29,3 +30,11 @@ AS
 	VALUES (
 		@nama, @alamat, @tgllahir, @reg, @hub, @status, @email
 	)
+
+	INSERT INTO noHpklien
+	SELECT(
+		fkKlien, @nohp
+	)
+	FROM
+		noHpklien join klien on
+		noHpklien.fkKlien = klien.idK

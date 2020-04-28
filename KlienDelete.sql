@@ -24,9 +24,6 @@ as
 	delete from noHpklien
 	where fkKlien = @idklien
 
-	delete from telepon
-	where idK = @idklien
-
 	delete from hubungan
 	where idUser = @idklien
 
