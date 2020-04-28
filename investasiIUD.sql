@@ -250,7 +250,7 @@ AS
 		from
 			perubahan
 		where
-			perubahan.waktu - @curDateTime
+			perubahan.waktu = @curDateTime
 
 		INSERT INTO history(
 			fkPerubahan, kolom, tipeData, nilaiSebelum
