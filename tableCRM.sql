@@ -11,7 +11,7 @@ drop table history
 
 
 create table [klien](
-	[idK] [int] NOT NULL,
+	[idK] [int] IDENTITY(1,1) PRIMARY KEY,
 	[nama] [varchar] (50) NOT NULL,
 	[alamat] [varchar] (100) NOT NULL,
 	[tglLahir] [date] NOT NULL,
@@ -33,24 +33,24 @@ create table [telepon](
 )
 
 create table [cusService](
-	[idC] [int] NOT NULL,
+	[idC] [int]  IDENTITY(1,1) PRIMARY KEY,
 	[nama] [varchar] (50) NOT NULL
 )
 
 create table [hubungan](
-	[idH] [int] NOT NULL,
+	[idH] [int]  IDENTITY(1,1) PRIMARY KEY,
 	[idKK] [int] NOT NULL,
 	[posisi] [varchar] (10) NOT NULL
 )
 
 create table [region](
-	[idR] [int] NOT NULL,
+	[idR] [int]  IDENTITY(1,1) PRIMARY KEY,
 	[namaKelompok] [varchar] (50) NOT NULL,
 	[idParent] [int] NOT NULL
 )
 
 create table [investasi](
-	[idIvest] [int] NOT NULL,
+	[idIvest] [int]  IDENTITY(1,1) PRIMARY KEY,
 	[fkIdKlien] [int] NOT NULL,
 	[nominal] [money] NOT NULL,
 	[waktu] [datetime] NOT NULL
@@ -58,14 +58,14 @@ create table [investasi](
 
 
 create table [perubahan](
-	[idPe] [int] NOT NULL,
+	[idPe] [int]  IDENTITY(1,1) PRIMARY KEY,	
 	[waktu] [datetime] NOT NULL,
 	[fkInvest] [int] NOT NULL,
 	[operasi] [int] NOT NULL
 )
 
 create table [history](
-	[idH] [int] NOT NULL,
+	[idH] [int] IDENTITY(1,1) PRIMARY KEY,
 	[fkPerubahan] [int] NOT NULL,
 	[kolom] [varchar] (20) NOT NULL,
 	[tipeData] [varchar] (10) NOT NULL,
