@@ -28,7 +28,7 @@ create table [noHpklien](
 )
 
 create table [telepon](
-	[idT] [int] IDENTITY(1,1) PRIMARY KEY,
+	[idK] [int] NOT NULL,
 	[noHp] [varchar](15) NOT NULL
 )
 
@@ -82,7 +82,7 @@ insert into noHpKlien select 2, '081234567892'
 insert into noHpKlien select 3, '081234567893'
 insert into noHpKlien select 4, '081234567894'
 
-insert into telepon (noHp) select '021-000200'
+insert into telepon select 1, '021-000200'
 
 insert into cusService (nama) select  'Tom'
 insert into cusService (nama) select  'Jerry'
