@@ -1,32 +1,68 @@
 CREATE PROCEDURE KlienDelete(
-@nama varchar(50)
+@nama VARCHAR(50)
 )
-as
-	declare @idklien int
-	select
+AS
+	DECLARE 
+		@idklien INT,
+		@curDateTime DATETIME,
+		@idRecord INT,
+		@idPerubahan INT
+	SET @curDateTime = GETDATE()
+
+	SELECT
 		idK = @idklien
-	from
+	FROM
 		klien
-	where
+	WHERE
 		nama = @nama
 
-
-	declare @idhubungan int
-	select
-		idH = @idhubungan
-	from
-		hubungan join klien on
-		hubungan.idH = klien.fkHubungan
-
-	delete from klien
-	where nama = @nama
-
-	delete from noHpklien
-	where fkKlien = @idklien
-
-	delete from hubungan
-	where idUser = @idklien
-
-	delete from investasi
-	where fkIdKlien = @idklien
+	SET @idRecord = (
+		SELECT
+			idK
+		FROM
+			klien
+		WHERE
+			nama = @nama
+	)
 	
+	INSERT INTO perubahan (waktu, tabel, idRecord, operasi)
+	VALUES (@curDateTime, 'klien', @idRecord, 'DELETE')
+
+	SET @idPerubahan = (
+		SELECT
+			idPe
+		FROM
+			Perubahan
+		WHERE
+			idRecord = @idRecord AND
+			tabel = 'klien'
+	)
+
+	INSERT INTO history (fkPerubahan, kolom, tipeData, nilaiSebelum)
+	VALUES (@idPerubahan, 'nama', 'varchar(50)',@nama)
+
+	DELETE FROM klien
+	WHERE nama = @nama
+
+	SELECT
+		*
+	FROM
+		klien
+
+	SELECT
+		idPe AS 'id Perubahan',
+		waktu,
+		tabel,
+		idRecord AS 'idKlien',
+		operasi
+	FROM
+		Perubahan
+	WHERE 
+		tabel = 'klien'
+
+	SELECT
+		fkPerubahan AS 'id Perubahan',
+		kolom,
+		nilaiSebelum AS 'Data klien Sebelum'
+	FROM history where kolom = 'nama'
+
