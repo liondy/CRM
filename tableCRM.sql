@@ -28,7 +28,7 @@ create table [noHpklien](
 )
 
 create table [telepon](
-	[idT] [int] NOT NULL,
+	[idT] [int] IDENTITY(1,1) PRIMARY KEY,
 	[noHp] [varchar](15) NOT NULL
 )
 
@@ -72,40 +72,40 @@ create table [history](
 	[nilaiSebelum] [varchar] (50) NOT NULL
 )
 
-insert into klien select 1,'Denise Stevani', 'rancabintang', '19990511', 1, 1, 1, 'dsgeb@gmail.com'
-insert into klien select 2,'Cristine Artanty', 'rancajupiter', '19990127', 2, 1, 1, 'tinetiny@gmail.com'
-insert into klien select 3,'Friska Christiana', 'rancabulan', '19981219', 1, 2, 1, 'friskac@gmail.com'
-insert into klien select 4,'Michael Liondy', 'rancavenus', '19990105', 1, 2, 1, 'miclio@gmail.com'
+insert into klien  (nama,alamat,tglLahir,fkRegion, fkHubungan, status, email)  select 'Denise Stevani', 'rancabintang', '19990511', 1, 1, 1, 'dsgeb@gmail.com'
+insert into klien  (nama,alamat,tglLahir,fkRegion, fkHubungan, status, email)  select 'Cristine Artanty', 'rancajupiter', '19990127', 2, 1, 1, 'tinetiny@gmail.com'
+insert into klien  (nama,alamat,tglLahir,fkRegion, fkHubungan, status, email)  select 'Friska Christiana', 'rancabulan', '19981219', 1, 2, 1, 'friskac@gmail.com'
+insert into klien  (nama,alamat,tglLahir,fkRegion, fkHubungan, status, email)  select 'Michael Liondy', 'rancavenus', '19990105', 1, 2, 1, 'miclio@gmail.com'
 
 insert into noHpKlien select 1, '081234567891'
 insert into noHpKlien select 2, '081234567892'
 insert into noHpKlien select 3, '081234567893'
 insert into noHpKlien select 4, '081234567894'
 
-insert into telepon select 1, '021-000200'
+insert into telepon (noHp) select '021-000200'
 
-insert into cusService select 1, 'Tom'
-insert into cusService select 2, 'Jerry'
+insert into cusService (nama) select  'Tom'
+insert into cusService (nama) select  'Jerry'
 
 
-insert into hubungan select 1, 1, 'ayah'
-insert into hubungan select 2, 1, 'ibu'
-insert into hubungan select 3, 2, 'ayah'
-insert into hubungan select 4, 2, 'ibu'
+insert into hubungan(idKK,posisi) select   1, 'ayah'
+insert into hubungan (idKK,posisi) select  1, 'ibu'
+insert into hubungan (idKK,posisi) select  2, 'ayah'
+insert into hubungan (idKK,posisi) select  2, 'ibu'
 
-insert into region select 1, 'Jawa Barat', 1
-insert into region select 2, 'Sumatera uUtara', 2
-insert into region select 3, 'Jakarta', 1
+insert into region (namaKelompok, idParent) select 'Jawa Barat', 1
+insert into region (namaKelompok, idParent) select  'Sumatera uUtara', 2
+insert into region (namaKelompok, idParent) select  'Jakarta', 1
 
-insert into investasi select 1, 1, 100000, '20190401 10:34:09 AM'
-insert into investasi select 2, 1, 200000, '20190407 15:20:01 PM'
-insert into investasi select 3, 2, 50000, '20190401 10:10:10 AM'
+insert into investasi (fkIdKlien, nominal, waktu) select  1, 100000, '20190401 10:34:09 AM'
+insert into investasi (fkIdKlien, nominal, waktu) select  1, 200000, '20190407 15:20:01 PM'
+insert into investasi (fkIdKlien, nominal, waktu) select  2, 50000, '20190401 10:10:10 AM'
 
-insert into perubahan select 1, '20190405 10:50:11 AM', 1, 2
-insert into perubahan select 2, '20190401 10:10:10 AM', 3, 1
+insert into perubahan (waktu, fkInvest, operasi) select  '20190405 10:50:11 AM', 1, 2
+insert into perubahan (waktu, fkInvest, operasi) select  '20190401 10:10:10 AM', 3, 1
 
-insert into history select 1, 1, 'nominal', 'money', '100000'
-insert into history select 1, 3, 'nominal', 'money', '50000'
+insert into history (fkPerubahan, kolom, tipeData, nilaiSebelum) select  1, 'nominal', 'money', '100000'
+insert into history (fkPerubahan, kolom, tipeData, nilaiSebelum) select  3, 'nominal', 'money', '50000'
 
 
 
