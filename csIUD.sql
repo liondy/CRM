@@ -114,21 +114,19 @@ AS
 		waktu,
 		tabel,
 		idRecord AS 'id CS',
-		operasi
-	FROM
-		Perubahan
-	WHERE 
-		tabel = 'CusService'
-
-	SELECT
-		fkPerubahan AS 'id Perubahan',
+		operasi,
 		kolom,
 		nilaiSebelum AS 'Data CS Sebelum'
-	FROM history where kolom = 'nama'
+	FROM
+		History INNER JOIN Perubahan ON
+		Hitory.fkPerubahan = Perubahan.idPe
+	WHERE
+		kolom = 'nama' AND
+		idRecord = @idRecord
 GO
 --param pertama: nama
 --param kedua: hapus atau tambah
-EXEC updateCustomerService 'Tom','tambah'
+EXEC updateCustomerService 'Tine','tambah'
 
 ALTER PROCEDURE undoPerubahanCSTerakhir
 AS
