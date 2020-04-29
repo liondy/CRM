@@ -30,7 +30,6 @@ ALTER PROCEDURE KlienInsert(
 	@alamat varchar(50),
 	@tgllahir datetime,
 	@namaRegion varchar(50),
-	@idKK int,
 	@hubungan varchar(50),
 	@email varchar(50),
 	@nominalInvest money,
@@ -44,7 +43,8 @@ AS
 		@curDateTime DATETIME,
 		@idRecord INT,
 		@idPerubahan INT,
-		@idCS INT
+		@idCS INT,
+		@idKK INT
 	SET @curDateTime = GETDATE()
 
 	SELECT
@@ -60,7 +60,7 @@ AS
 		FROM
 			klien
 		WHERE
-			nama = @nama and tglLahir = @tgllahir and fkHubungan = @idKK
+			nama = @nama and tglLahir = @tgllahir and email = @email
 	)
 	
 	SET @idCs = (
@@ -70,6 +70,13 @@ AS
 			CusService
 		WHERE
 			idC = @cusService
+	)
+
+	SET @idKK = (
+		SELECT
+			MAX(idKK) + 1
+		FROM
+			Hubungan
 	)
 
 	IF (@iduser is null and @idCS is not null)
@@ -140,6 +147,18 @@ AS
 		klien
 
 	SELECT
+		Klien.nama AS 'Nama Klien',
+		nominal,
+		waktu,
+		CusService.nama AS 'Nama CS'
+	FROM
+		Investasi INNER JOIN Klien ON
+		Investasi.fkIdKlien = Klien.idK INNER JOIN CusService ON
+		CusService.idC = Investasi.fkCusService
+	WHERE
+		Klien.idK = @iduser
+
+	SELECT
 		idPe AS 'id Perubahan',
 		waktu,
 		tabel,
@@ -156,4 +175,4 @@ AS
 		nilaiSebelum AS 'Data klien Sebelum'
 	FROM history
 	go
-exec KlienInsert 'bebek', 'kembar', '19990520', 'Jawa Barat', 12345, 'ayah', 'tine@gmail.com', 1000, 1
+exec KlienInsert 'bebek', 'kembar', '19990520', 'Jawa Barat', 'ayah', 'tine@gmail.com', 1000, 1

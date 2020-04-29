@@ -19,6 +19,53 @@ select * from history
 EXEC reset
 
 /*
+skenario insert klien : 
+		@param : nama
+		@param : alamat
+		@param : tanggal lahir
+		@param : namaRegion 
+		@param : hubungan
+		@param : email
+		@param : nominal
+		@param : id CS
+
+		- cek jika nama region belum ada di tabel region, 
+			1. jika ada ga ada insert 
+			2. jika nama region belum terdaftar insert nama region terlebih dahulu
+
+		- cek apakah user sebelumnya pernah kedaftar kedalam tabel dengan mengecek
+			1. apakah user dengan nama, tanggal lahir, dan idKK tersebut sudah ada atau tidak
+			2. jika ada tidak dapat insert
+			3. jika tidak maka insert 
+*/
+exec KlienInsert 'bebek', 'kembar', '19990520', 'Jawa Barat', 'ayah', 'tine@gmail.com', 1000, 1
+
+/*
+	Stored Procedure untuk mengupdate seorang klien
+	Value yang di update dapat beragam yaitu
+		1. alamat baru
+		2. nama region baru
+		3. posisi hubungan baru
+		4. status baru (0: nonaktif, 1: aktif)
+		5. email baru
+	Semua value dipisahkan oleh ';'
+	@param idKlien : id dari klien yang ingin diupdate datanya
+	@param perubahan : perubahan-perubahan yang ingin dilakukan dengan format di atas
+	@return data klien baru
+*/
+EXEC KlienUpdate 2,'unpar;;;;bebek@gmail.com'
+
+/*
+	STORE PRODUCE untuk DELETE data klien
+	Syarat : harus terdaftar menjadi klien terlebih dahulu
+	@param nama : nama dari klien yang sudah terdaftar dan mau di hapus
+	@idK  = id dari klien yang mau di hapus
+	menggunakan nama dan id agar meminimalisir kesalahan dalam input
+*/
+
+exec KlienDelete 'Asep', 5
+
+/*
 	Stored Procedure untuk memasukkan no HP seorang klien
 	No HP yang dimasukkan hanya dibatasi 2 saja dan no HP tidak boleh sama
 	@param idKlien: id dari klien yang akan diinput no HP nya
@@ -154,14 +201,4 @@ exec hubunganInsert 3,1
 */
 
 exec hubunganDelete 1
-
-/*
-	STORE PRODUCE untuk DELETE data klien
-	Syarat : harus terdaftar menjadi klien terlebih dahulu
-	@param nama : nama dari klien yang sudah terdaftar dan mau di hapus
-	@idK  = id dari klien yang mau di hapus
-	menggunakan nama dan id agar meminimalisir kesalahan dalam input
-*/
-
-exec KlienDelete 'Asep', 5
 

@@ -70,7 +70,7 @@ BEGIN
 END
 
 
-Create procedure hubunganDelete(
+ALTER procedure hubunganDelete(
 	@idUser int
 )
 as 
