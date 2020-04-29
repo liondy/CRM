@@ -183,6 +183,8 @@ BEGIN
 		END
 END
 
+
+
 ALTER PROCEDURE investasiInsert(
 	@idKlien varchar(50),
 	@nominal money,
@@ -196,7 +198,27 @@ AS
 
 	declare @idInvest int
 	declare @idPerubahan int
-		
+	declare @idK1 int
+	declare @idK2 int
+	set @idK1 = (
+		SELECT
+			fkIdKlien
+		FROM
+			Investasi
+		WHERE
+			fkIdKlien = @idKlien
+	)
+
+	set @idK2 = (
+		SELECT
+			idK
+		FROM
+			Klien
+		WHERE
+			idK = @idKlien
+	)
+
+	IF @idK1 IS NULL AND @idK2 IS NOT NULL
 	BEGIN	
 		INSERT INTO investasi(
 			fkIdKlien, nominal, waktu, fkCusService
@@ -230,13 +252,6 @@ AS
 			fkPerubahan, kolom, tipeData, nilaiSebelum
 		)
 		VALUES(
-			@idPerubahan, 'fkIdKlien', 'int', '0'
-		)
-
-		INSERT INTO history(
-			fkPerubahan, kolom, tipeData, nilaiSebelum
-		)
-		VALUES(
 			@idPerubahan, 'nominal', 'money', '0'
 		)
 
@@ -244,13 +259,34 @@ AS
 			fkPerubahan, kolom, tipeData, nilaiSebelum
 		)
 		VALUES(
-			@idPerubahan, 'waktu', 'datetime', '0'
-		)
-
-		INSERT INTO history(
-			fkPerubahan, kolom, tipeData, nilaiSebelum
-		)
-		VALUES(
-			@idPerubahan, 'fkCusService', 'int', '0'
+			@idPerubahan, 'fkCusService', 'int', ''
 		)
 	END
+
+	SELECT
+		Klien.idK AS 'Id Klien',
+		Klien.nama AS 'Nama',
+		nominal AS 'Besaran Investasi',
+		waktu,
+		CusService.nama AS 'Nama CS'
+	FROM
+		Investasi INNER JOIN Klien ON
+		Investasi.fkIdKlien = Klien.idK INNER JOIN CusService ON
+		Investasi.fkCusService = CusService.idC
+	WHERE
+		Investasi.fkIdKlien = @idKlien
+
+	SELECT
+		idPe AS 'id Perubahan',
+		waktu,
+		tabel,
+		idRecord AS 'id Klien',
+		operasi,
+		kolom,
+		nilaiSebelum AS 'Nilai Sebelum'
+	FROM
+		History INNER JOIN Perubahan ON
+		History.fkPerubahan = Perubahan.idPe
+	WHERE
+		tabel = 'investasi' AND
+		idRecord = @idKlien

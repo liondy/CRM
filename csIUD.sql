@@ -119,15 +119,21 @@ AS
 		nilaiSebelum AS 'Data CS Sebelum'
 	FROM
 		History INNER JOIN Perubahan ON
-		Hitory.fkPerubahan = Perubahan.idPe
+		History.fkPerubahan = Perubahan.idPe
 	WHERE
-		kolom = 'nama' AND
+		tabel = 'CusService' AND
 		idRecord = @idRecord
 GO
 --param pertama: nama
 --param kedua: hapus atau tambah
-EXEC updateCustomerService 'Tine','tambah'
+EXEC updateCustomerService 'Denise','hapus'
 
+/*
+	STORED PROCEDURE undo perubahan CS Terakhir
+	Hanya bisa UNDO Perubahan terakhir
+	Apabila tidak terakhir maka hanya mengembalikan tabel akhir saja
+	dan tidak ada perubahan
+*/
 ALTER PROCEDURE undoPerubahanCSTerakhir
 AS
 	DECLARE
@@ -259,4 +265,5 @@ AS
 		nilaiSebelum AS 'Data CS Sebelum'
 	FROM history where kolom = 'nama'
 GO
+--tidak memiliki param
 EXEC undoPerubahanCSTerakhir
