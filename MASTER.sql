@@ -62,3 +62,5 @@ EXEC investasiUpdate 1,100000,1
 	@return: tabel yang di log ke history serta tabel investasi yang menunjukkan bahwa investasinya sudah kosong
 */
 EXEC investasiDelete 1
+
+EXEC undoPerubahanInvestasi 

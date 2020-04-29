@@ -1,4 +1,4 @@
-CREATE PROCEDURE investasiDelete(
+ALTER PROCEDURE investasiDelete(
 	@idKlien int
 )
 AS
@@ -137,7 +137,7 @@ AS
 		idRecord = @idKlien
 
 ALTER PROCEDURE investasiUpdate(
-	@IdKlien varchar(50),
+	@IdKlien int,
 	@nominal money,
 	@fkCusSer int
 )
@@ -169,7 +169,7 @@ AS
 		FROM
 			CusService
 		WHERE
-			idC = @idCs
+			idC = @fkCusSer
 	)
 
 	IF @idInv IS NOT NULL AND @idCs IS NOT NULL
@@ -510,6 +510,10 @@ BEGIN
 						FROM
 							investasi
 					)
+					IF @idLast IS NULL
+					BEGIN
+						SET @idLast = 0
+					END
 					DBCC checkident(investasi,reseed,@idLast)
 				END
 		END
