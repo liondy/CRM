@@ -20,7 +20,7 @@ select * from history
 	@param operasi: tambah atau hapus (string) --> penulisan harus pakai ''
 	return: list seluruh CS, tabel perubahan join history mengenai CS tersebut
 */
-EXEC updateCustomerService 'Denise','hapus'
+EXEC updateCustomerService 'Denise','tambah'
 
 /*
 	STORED PROCEDURE UNDO perubahan CS Terakhir
@@ -38,8 +38,17 @@ EXEC undoPerubahanCSTerakhir
 	Harus terdaftar sebagai klien terlebih dahulu sebelum bisa berinvestasi
 	Apabila id klien tidak terdaftar, maka SP tidak akan mengembalikan apapun.
 	@param idKlien: klien yang ingin melakukan investasi, ID didapat dari masukkan terlebih dahulu orang baru ke tabel klien sehingga akan mendapatkan id Klien nya (int)
-	@param nominal: besaran uang yang ingin diinvestasikan client tersebut (int)
+	@param nominal: besaran uang yang ingin diinvestasikan client tersebut (money)
 	@param CS: id CS yang melayani client, setiap CS diasumsikan mengingat id nya masing-masing (int)
 */
-EXEC investasiInsert 6,50000,4
+EXEC investasiInsert 1,50000,4
 
+/*
+	STORED PROCEDURE untuk mengupdate investasi seseorang
+	Syarat: harus pernah melakukan investasi terlebih dahulu
+	Investasi sebelumnya akan di update nilainya jadi investasi yang dimasukin
+	@param idKlien: klien yang ingin melakukan investasi, investasi klien sebelumnya akan di update (int)
+	@param nominal: nominal terbaru klien yang ingin di update (money)
+	@param id CS: id CS yang melayani client, setiap CS harus mengingat id nya masing-masing (int)
+*/
+EXEC investasiUpdate 1,100000,3

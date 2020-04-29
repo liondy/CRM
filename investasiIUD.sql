@@ -113,75 +113,123 @@ AS
 	declare @tempLatestDate datetime --ambil tanggal perubahan terakhir karena diasumsikan terdapat banyak perubahan untuk suatu klien
 	declare @tempFKcusBefore int --ambil fkcus yang sebelum nya melayani klien 
 
-BEGIN
-	select
-		@tempLatestDate = max(waktu)
-	from
-		investasi
-	where
-		investasi.fkIdKlien = @idKlien
+	SET @idInv = (
+		SELECT
+			idIvest
+		FROM
+			Investasi
+		WHERE
+			fkIdKlien = @IdKlien
+	)
 
-	select
-		@nomBefore = investasi.nominal
-	from
-		investasi
-	where
-		investasi.fkIdKlien = @idKlien AND investasi.waktu = @tempLatestDate
+	IF @idInv IS NOT NULL
+	BEGIN
+		select
+			@tempLatestDate = max(waktu)
+		from
+			investasi
+		where
+			investasi.fkIdKlien = @idKlien
+
+		select
+			@nomBefore = investasi.nominal
+		from
+			investasi
+		where
+			investasi.fkIdKlien = @idKlien AND investasi.waktu = @tempLatestDate
 	
-	select
-		@tempFKcusBefore = investasi.fkCusService
-	from
-		investasi
-	where
-		investasi.fkIdKlien = @idKlien AND investasi.waktu = @templatestDate
+		select
+			@tempFKcusBefore = investasi.fkCusService
+		from
+			investasi
+		where
+			investasi.fkIdKlien = @idKlien AND investasi.waktu = @templatestDate
 	
-	INSERT INTO investasi(
-		fkIdKlien, nominal, waktu, fkCusService
-	)
-	VALUES(
-		@idKlien, @nominal, @curDate, @fkCusSer
-	)
+		UPDATE investasi
+		SET
+			nominal = @nominal,
+			waktu = @curDate,
+			fkCusService = @fkCusSer
+		WHERE
+			fkIdKlien = @IdKlien
 
-	--mendapat idInvest yang paling baru yang barusan di insert
-	select
-		@idInv = investasi.idIvest
-	from
-		investasi
-	where
-		investasi.waktu = @curDate AND investasi.fkIdKlien = @idKlien
+		--mendapat idInvest yang paling baru yang barusan di insert
+		select
+			@idInv = investasi.idIvest
+		from
+			investasi
+		where
+			investasi.waktu = @curDate AND investasi.fkIdKlien = @idKlien
 
-	INSERT INTO perubahan(
-		waktu, idRecord, operasi, tabel 
-	)
-	VALUES(
-		@curDate, @idInv, 'UPDATE', 'investasi'
-	)
+		INSERT INTO perubahan(
+			waktu, idRecord, operasi, tabel 
+		)
+		VALUES(
+			@curDate, @idInv, 'UPDATE', 'investasi'
+		)
 
-	--mendapat idPerubahan yang paling baru yang barusan di insert
-	select 
-		@idPerubahan = perubahan.idPe
-	from
-		perubahan
-	where
-		perubahan.waktu = @curDate AND perubahan.idRecord = @idInv
+		--mendapat idPerubahan yang paling baru yang barusan di insert
+		select 
+			@idPerubahan = perubahan.idPe
+		from
+			perubahan
+		where
+			perubahan.waktu = @curDate AND perubahan.idRecord = @idInv
 
-	INSERT INTO history(
-		fkPerubahan,kolom, tipeData, nilaiSebelum
-	)
-	VALUES(
-		@idPerubahan, 'nominal', 'money', @nomBefore
-	)
+		INSERT INTO history(
+			fkPerubahan,kolom, tipeData, nilaiSebelum
+		)
+		VALUES(
+			@idPerubahan, 'nominal', 'money', @nomBefore
+		)
 
-	if(@fkCusSer != @tempFKcusBefore)
-		BEGIN
-			INSERT INTO history(
-				fkPerubahan,kolom, tipeData, nilaiSebelum
-			)
-			VALUES(
-				@idPerubahan, 'fkCusService', 'int', @tempFKcusBefore
-			)
-		END
-END
+		if(@fkCusSer != @tempFKcusBefore)
+			BEGIN
+				DECLARE @tempNama varchar(50)
+				SET @tempNama = (
+					SELECT
+						nama
+					FROM
+						CusService
+					WHERE
+						idC = @tempFKcusBefore
+				)
+				INSERT INTO history(
+					fkPerubahan,kolom, tipeData, nilaiSebelum
+				)
+				VALUES(
+					@idPerubahan, 'fkCusService', 'int', @tempNama
+				)
+			END
+	END
+
+	SELECT
+		Klien.idK AS 'Id Klien',
+		Klien.nama AS 'Nama',
+		nominal AS 'Besaran Investasi',
+		waktu,
+		CusService.nama AS 'Nama CS'
+	FROM
+		Investasi INNER JOIN Klien ON
+		Investasi.fkIdKlien = Klien.idK INNER JOIN CusService ON
+		Investasi.fkCusService = CusService.idC
+	WHERE
+		Investasi.fkIdKlien = @idKlien
+
+	SELECT
+		idPe AS 'id Perubahan',
+		waktu,
+		tabel,
+		idRecord AS 'id Klien',
+		operasi,
+		kolom,
+		nilaiSebelum AS 'Nilai Sebelum'
+	FROM
+		History INNER JOIN Perubahan ON
+		History.fkPerubahan = Perubahan.idPe
+	WHERE
+		tabel = 'investasi' AND
+		idRecord = @idKlien
 
 
 
