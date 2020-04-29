@@ -63,4 +63,10 @@ EXEC investasiUpdate 1,100000,1
 */
 EXEC investasiDelete 1
 
+/*
+	STORED PROCEDURE untuk UNDO operasi investasi
+	Saat ini baru sampai dapat mengembalikan nominal yang salah dimasukkan
+	@param: -
+	@return: saat ini masih belum ada hasil return
+*/
 EXEC undoPerubahanInvestasi 
