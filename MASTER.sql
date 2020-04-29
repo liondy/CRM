@@ -43,3 +43,13 @@ EXEC undoPerubahanCSTerakhir
 */
 EXEC investasiInsert 6,50000,4
 
+/*
+	STORED PROCEDURE untuk melakukan update sebuah investasi
+	Klien harus sudah melakukan investasi terlebih dahulu
+	Apabila klien belum melakukan investasi, dan akan melakukan update maka SP tidak akan melakukan apapun
+	@param idKlien : Klien yang ingin melakukan update investasi (int)
+	@param nominal : besaran uang yang menjadi nominal untuk mengubah investasi terakhir (int)
+	@param CS : id cs yang melayani klien, setiap CS diasumsikan wajib mengingat id-nya masing masing (int)
+*/
+EXEC investasiUpdate 3,100000,2
+
