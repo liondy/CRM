@@ -19,6 +19,26 @@ select * from history
 EXEC reset
 
 /*
+	Stored Procedure untuk memasukkan no HP seorang klien
+	No HP yang dimasukkan hanya dibatasi 2 saja dan no HP tidak boleh sama
+	@param idKlien: id dari klien yang akan diinput no HP nya
+	@param no HP: no hp klien (string) --> input perlu pakai ''
+	@return: nama beserta no HP untuk klien tersebut
+*/
+EXEC noHPInsert 1,'08123546853'
+
+/*
+	Stored Procedure untuk menghapus no HP seorang klien
+	@param idKlien: id dari klien yang ingin dihapus no HP nya
+	@param no HP: no hp klien (string) --> input perlu pakai ''
+	Keterangan: Apabila ingin melakukan update, maka hal yang dilakukan adalah:
+		1. nomor telepon yang ingin di update dihapus dengan menjalankan SP noHpDelete
+		2. nomor telepon baru ditambahkan dengan menjalankan SP noHPInsert
+	@return: nama beserta no HP untuk klien tersebut
+*/
+EXEC noHpDelete 1, '08123546853'
+
+/*
 	Stored Procedure untuk cek id kota dari suatu kota
 	Dipakai agar saat ingin memasukan sebuah kota sudah dipastikan terlebih dahulu id dari parent nya
 	@param region: nama region yang ingin dicari ID nya
