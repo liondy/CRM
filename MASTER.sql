@@ -134,3 +134,34 @@ EXEC investasiDelete 1
 	@return: saat ini masih belum ada hasil return
 */
 EXEC undoPerubahanInvestasi
+
+/*
+	STORED PRODUCE untuk INSERT data hubungan dari klien
+	Syarat : Harus mendaftar menjadi klien terlebih dahulu 
+	Apabila id klien tidak ada maka harus di insert dulu pada table klien
+	@param idUser : id dari klien yang akan di input hubunganya dengan siapa
+	@param posisi : menunjkkan posisi dalam keluarga (e.g Ibu) dituliskan dalam int
+*/
+
+exec hubunganInsert 3,1
+
+/*
+	STORE PRODUCE untuk DELETE data hubungan dari klien
+	Syarat : harus terdaftar menjadi klien (ada id klien)
+	jika tidak terdaftar menjadi klien maka akan tidak mengembalikan apapaun
+	@param idUser : menghapus hubungan dalam user misalnya user tersebut pindah KK 
+	maka hubungan lama akan di delete dan di insert yang baru
+*/
+
+exec hubunganDelete 1
+
+/*
+	STORE PRODUCE untuk DELETE data klien
+	Syarat : harus terdaftar menjadi klien terlebih dahulu
+	@param nama : nama dari klien yang sudah terdaftar dan mau di hapus
+	@idK  = id dari klien yang mau di hapus
+	menggunakan nama dan id agar meminimalisir kesalahan dalam input
+*/
+
+exec KlienDelete 'Asep', 5
+
