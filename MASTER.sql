@@ -51,4 +51,4 @@ EXEC investasiInsert 1,50000,1
 	@param nominal: nominal terbaru klien yang ingin di update (money)
 	@param id CS: id CS yang melayani client, setiap CS harus mengingat id nya masing-masing (int)
 */
-EXEC investasiUpdate 1,100000,3
+EXEC investasiUpdate 1,100000,1
