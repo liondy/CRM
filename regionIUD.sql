@@ -132,55 +132,120 @@ EXEC insertReg 'Sulawesi Selatan', 0
 
 -------------------------------------------------------------------------
 alter procedure updateReg(
-	@idR int,
+	@namaRegion varchar(50),
 	@idParLama int,
-	@idParBaru int,
-	@StatementType nvarchar(20) = '' 
+	@idParBaru int
 )
 as
-
-	--untuk mendapatkan waktu server saat ini
-	declare @curDate datetime
-	select 
-		@curDate = GETDATE()
-
-	declare @idPerubahan int --idPerubahan terakhir
-	declare @parentBefore int 
-BEGIN
-	select
-		@parentBefore = region.idParent
-	from
-		region
-	where
-		region.idR = @idR AND region.idParent = @idParLama
-	update region
-		set idParent = @idParBaru
-		where idR = @idR AND idParent = @idParLama
-
-	INSERT INTO perubahan(
-		waktu, idRecord, operasi, tabel 
+	DECLARE @idRegion int
+	DECLARE @idReg int
+	SET @idRegion = (
+		SELECT TOP 1
+			idR
+		FROM
+			Region
+		WHERE
+			namaKelompok = @namaRegion
 	)
-	VALUES(
-		@curDate, @idR, 'UPDATE', 'region'
-	)
+	IF @idRegion IS NOT NULL
+	BEGIN
+		--untuk mendapatkan waktu server saat ini
+		declare @curDate datetime
+		select 
+			@curDate = GETDATE()
 
-	--mendapat idPerubahan yang paling baru yang barusan di insert
-	select 
-		@idPerubahan = perubahan.idPe
-	from
-		perubahan
-	where
-		perubahan.waktu = @curDate AND perubahan.idRecord = @idR
+		declare @idPerubahan int --idPerubahan terakhir
+		declare @parentBefore int 
+		declare @namaRegion1 varchar(50)
+		declare @idR int
 
-	INSERT INTO history(
-		fkPerubahan,kolom, tipeData, nilaiSebelum
-	)
-	VALUES(
-		@idPerubahan, 'idParent', 'int', @parentBefore
-	)
-END
+		SET @idR = (
+			SELECT
+				idR
+			FROM
+				Region
+			WHERE
+				idParent = @idParBaru AND
+				namaKelompok = @namaRegion
+		)
 
-EXEC updateReg 7, 5, 3, 'UPDATE'
+		IF @idParLama != @idParBaru AND @idR IS NULL
+		BEGIN
+			select
+				@parentBefore = region.idParent
+			from
+				region
+			where
+				region.namaKelompok = @namaRegion1 AND region.idParent = @idParLama
+			update region
+				set idParent = @idParBaru
+				where namaKelompok = @namaRegion AND idParent = @idParLama
+
+			SET @idReg = (
+				SELECT
+					idR
+				FROM
+					Region
+				WHERE
+					namaKelompok = @namaRegion AND
+					idParent = @idParBaru
+			)
+
+			INSERT INTO perubahan(
+				waktu, idRecord, operasi, tabel 
+			)
+			VALUES(
+				@curDate, @idReg, 'UPDATE', 'Region'
+			)
+
+			--mendapat idPerubahan yang paling baru yang barusan di insert
+			select 
+				@idPerubahan = perubahan.idPe
+			from
+				perubahan
+			where
+				perubahan.waktu = @curDate AND perubahan.idRecord = @idR
+
+			INSERT INTO history(
+				fkPerubahan,kolom, tipeData, nilaiSebelum
+			)
+			VALUES(
+				@idPerubahan, 'idParent', 'int', @parentBefore
+			)
+		END
+	END
+
+	SELECT
+		R.idR AS 'id Region',
+		R.namaKelompok AS 'Nama Daerah',
+		(SELECT
+			namaKelompok
+		FROM
+			Region
+		WHERE
+			idR = R.idParent
+		) AS 'Nama Kelompok'
+	FROM
+		Region R
+	WHERE
+		R.idR = @idReg
+
+	SELECT
+		idPe AS 'id Perubahan',
+		waktu,
+		tabel,
+		idRecord AS 'id Region',
+		operasi,
+		kolom,
+		nilaiSebelum AS 'Nilai Sebelum'
+	FROM
+		History INNER JOIN Perubahan ON
+		History.fkPerubahan = Perubahan.idPe
+	WHERE
+		tabel = 'Region' AND
+		idRecord = @idReg
+
+EXEC updateReg 'Bogor', 2, 4
 
 select *
 from region 
@@ -333,7 +398,7 @@ ALTER PROCEDURE checkIdKota
 	@namaRegion varchar(50)
 AS
 	SELECT
-		idR
+		MIN(idR)
 	FROM
 		Region
 	WHERE

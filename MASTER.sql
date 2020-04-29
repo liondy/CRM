@@ -35,7 +35,18 @@ EXEC checkIdKota 'Bandung'
 	@param idParent: id dari daerah yang akan menjadi parent daerah tersebut (int)
 	@return: tabel daerah yang baru saja dimasukan serta nama parent nya serta tabel log nya
 */
-EXEC insertReg 'Bandung', 0
+EXEC insertReg 'Bogor', 4
+
+/*
+	Stored Procedure untuk melakukan update terhadap region yang ada
+	Update yang dilakukan adalah mengupdate parent (kelompok) dari suatu region
+	Kedua param ini merupakan ID (ID dapat di cek dari SP checkIdKota)
+	@param nama Region: nama dari region yang ingin diubah
+	@param id Kelompok Lama: id dari region yang lama yang ingin di lepas
+	@param id Kelompok Baru: id dari region yang baru yang ingin di pakai
+	@return: tabel daerah yang baru diupdate serta nama parent nya serta tabel log nya
+*/
+EXEC updateReg 'Bogor', 2, 4
 
 /*
 	Stored Procedure untuk mengupdate data customer service (INSERT / DELETE)
