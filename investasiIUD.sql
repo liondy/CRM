@@ -95,7 +95,6 @@ BEGIN
 	WHERE investasi.fkIdKlien = @idKlien
 END
 
---update dapat dilakukan lebih dari dua kali
 ALTER PROCEDURE investasiUpdate(
 	@IdKlien varchar(50),
 	@nominal money,
@@ -109,8 +108,8 @@ AS
 
 	declare @idInv int --idInvestasi yang baru dimasukkan
 	declare @idPerubahan int --idPerubahan terakhir
-	declare @nomBefore money --nominal perubahan terakhir
-	declare @tempLatestDate datetime --ambil tanggal perubahan terakhir karena diasumsikan terdapat banyak perubahan untuk suatu klien
+	declare @nomBefore money --nominal sebelum perubahan terakhir
+	declare @tempLatestDate datetime --ambil tanggal perubahan terakhir
 	declare @tempFKcusBefore int --ambil fkcus yang sebelum nya melayani klien 
 
 	SET @idInv = (
