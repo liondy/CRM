@@ -41,7 +41,7 @@ EXEC undoPerubahanCSTerakhir
 	@param nominal: besaran uang yang ingin diinvestasikan client tersebut (money)
 	@param CS: id CS yang melayani client, setiap CS diasumsikan mengingat id nya masing-masing (int)
 */
-EXEC investasiInsert 1,50000,4
+EXEC investasiInsert 1,50000,1
 
 /*
 	STORED PROCEDURE untuk mengupdate investasi seseorang

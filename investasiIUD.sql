@@ -197,6 +197,7 @@ AS
 	declare @idPerubahan int
 	declare @idK1 int
 	declare @idK2 int
+	declare @idCs int
 	set @idK1 = (
 		SELECT
 			fkIdKlien
@@ -215,7 +216,16 @@ AS
 			idK = @idKlien
 	)
 
-	IF @idK1 IS NULL AND @idK2 IS NOT NULL
+	SET @idCs = (
+		SELECT
+			idC
+		FROM
+			CusService
+		WHERE
+			idC = @cusSer
+	)
+
+	IF @idK1 IS NULL AND @idK2 IS NOT NULL AND @idCs IS NOT NULL
 	BEGIN	
 		INSERT INTO investasi(
 			fkIdKlien, nominal, waktu, fkCusService
