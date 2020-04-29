@@ -112,123 +112,73 @@ AS
 	declare @tempLatestDate datetime --ambil tanggal perubahan terakhir
 	declare @tempFKcusBefore int --ambil fkcus yang sebelum nya melayani klien 
 
-	SET @idInv = (
-		SELECT
-			idIvest
-		FROM
-			Investasi
-		WHERE
-			fkIdKlien = @IdKlien
+BEGIN
+	select
+		@tempLatestDate = investasi.waktu
+	from
+		investasi
+	where
+		investasi.fkIdKlien = @idKlien
+
+	select
+		@nomBefore = investasi.nominal
+	from
+		investasi
+	where
+		investasi.fkIdKlien = @idKlien AND investasi.waktu = @tempLatestDate
+	
+	select
+		@tempFKcusBefore = investasi.fkCusService
+	from
+		investasi
+	where
+		investasi.fkIdKlien = @idKlien AND investasi.waktu = @templatestDate
+	
+	UPDATE investasi SET
+		fkIdKlien = @IdKlien, nominal = @nominal, waktu = @curDate, fkCusService = @fkCusSer
+	WHERE 
+		investasi.fkIdKlien = @IdKlien
+
+	--mendapat idInvest yang paling baru yang barusan di insert
+	select
+		@idInv = investasi.idIvest
+	from
+		investasi
+	where
+		investasi.waktu = @curDate AND investasi.fkIdKlien = @idKlien
+
+	INSERT INTO perubahan(
+		waktu, idRecord, operasi, tabel 
+	)
+	VALUES(
+		@curDate, @idInv, 'UPDATE', 'investasi'
 	)
 
-	IF @idInv IS NOT NULL
-	BEGIN
-		select
-			@tempLatestDate = max(waktu)
-		from
-			investasi
-		where
-			investasi.fkIdKlien = @idKlien
+	--mendapat idPerubahan yang paling baru yang barusan di insert
+	select 
+		@idPerubahan = perubahan.idPe
+	from
+		perubahan
+	where
+		perubahan.waktu = @curDate AND perubahan.idRecord = @idInv
 
-		select
-			@nomBefore = investasi.nominal
-		from
-			investasi
-		where
-			investasi.fkIdKlien = @idKlien AND investasi.waktu = @tempLatestDate
-	
-		select
-			@tempFKcusBefore = investasi.fkCusService
-		from
-			investasi
-		where
-			investasi.fkIdKlien = @idKlien AND investasi.waktu = @templatestDate
-	
-		UPDATE investasi
-		SET
-			nominal = @nominal,
-			waktu = @curDate,
-			fkCusService = @fkCusSer
-		WHERE
-			fkIdKlien = @IdKlien
+	INSERT INTO history(
+		fkPerubahan,kolom, tipeData, nilaiSebelum
+	)
+	VALUES(
+		@idPerubahan, 'nominal', 'money', @nomBefore
+	)
 
-		--mendapat idInvest yang paling baru yang barusan di insert
-		select
-			@idInv = investasi.idIvest
-		from
-			investasi
-		where
-			investasi.waktu = @curDate AND investasi.fkIdKlien = @idKlien
-
-		INSERT INTO perubahan(
-			waktu, idRecord, operasi, tabel 
-		)
-		VALUES(
-			@curDate, @idInv, 'UPDATE', 'investasi'
-		)
-
-		--mendapat idPerubahan yang paling baru yang barusan di insert
-		select 
-			@idPerubahan = perubahan.idPe
-		from
-			perubahan
-		where
-			perubahan.waktu = @curDate AND perubahan.idRecord = @idInv
-
-		INSERT INTO history(
-			fkPerubahan,kolom, tipeData, nilaiSebelum
-		)
-		VALUES(
-			@idPerubahan, 'nominal', 'money', @nomBefore
-		)
-
-		if(@fkCusSer != @tempFKcusBefore)
-			BEGIN
-				DECLARE @tempNama varchar(50)
-				SET @tempNama = (
-					SELECT
-						nama
-					FROM
-						CusService
-					WHERE
-						idC = @tempFKcusBefore
-				)
-				INSERT INTO history(
-					fkPerubahan,kolom, tipeData, nilaiSebelum
-				)
-				VALUES(
-					@idPerubahan, 'fkCusService', 'int', @tempNama
-				)
-			END
-	END
-
-	SELECT
-		Klien.idK AS 'Id Klien',
-		Klien.nama AS 'Nama',
-		nominal AS 'Besaran Investasi',
-		waktu,
-		CusService.nama AS 'Nama CS'
-	FROM
-		Investasi INNER JOIN Klien ON
-		Investasi.fkIdKlien = Klien.idK INNER JOIN CusService ON
-		Investasi.fkCusService = CusService.idC
-	WHERE
-		Investasi.fkIdKlien = @idKlien
-
-	SELECT
-		idPe AS 'id Perubahan',
-		waktu,
-		tabel,
-		idRecord AS 'id Klien',
-		operasi,
-		kolom,
-		nilaiSebelum AS 'Nilai Sebelum'
-	FROM
-		History INNER JOIN Perubahan ON
-		History.fkPerubahan = Perubahan.idPe
-	WHERE
-		tabel = 'investasi' AND
-		idRecord = @idKlien
+	if(@fkCusSer != @tempFKcusBefore)
+		BEGIN
+			INSERT INTO history(
+				fkPerubahan,kolom, tipeData, nilaiSebelum
+			)
+			VALUES(
+				@idPerubahan, 'fkCusService', 'int', @tempFKcusBefore
+			)
+		END
+END
 
 
 
@@ -337,3 +287,131 @@ AS
 	WHERE
 		tabel = 'investasi' AND
 		idRecord = @idKlien
+
+alter procedure undoPerubahanInvestasi
+as
+	declare @idPerubahanBefore int
+	select
+		@idPerubahanBefore = max(idPe)
+	from
+		perubahan
+	where
+		tabel = 'investasi'
+
+	declare @idRecord int
+	select
+		@idRecord = idRecord
+	from
+		perubahan
+	where
+		idPe = @idPerubahanBefore
+
+	declare @operasi varchar(10)
+	select
+		@operasi = operasi
+	from 
+		perubahan
+	where
+		idPe = @idPerubahanBefore
+
+	declare @nilaiNominalSebelum varchar(20)
+	select
+		@nilaiNominalSebelum = nilaiSebelum
+	from
+		history
+	where
+		fkPerubahan = @idPerubahanBefore and kolom = 'nominal'
+
+	declare @nilaiFkCsSebelum varchar(20)
+	select
+		@nilaiFkCsSebelum = nilaiSebelum
+	from
+		history
+	where
+		fkPerubahan = @idPerubahanBefore and kolom = 'fkCusService'
+
+	declare @idKlien int
+	select 
+		@idKlien = fkIdKlien
+	from	
+		investasi
+	where
+		idIvest = @idRecord
+
+	declare @nilaiNominalNow money
+	declare @nilaiCSNow int
+	declare @temp int
+	declare @idLast int
+BEGIN 
+	if @operasi != 'UNDO'
+		BEGIN
+			if @nilaiNominalSebelum = '' and @nilaiFkCsSebelum = ''
+				BEGIN
+					select
+						@nilaiNominalNow = nominal
+					from 
+						investasi
+					where
+						fkIdKlien = @idKlien
+
+					select 
+						@nilaiCSNow = fkCusService
+					from
+						investasi
+					where
+						fkIdKlien = @idKlien
+
+					DELETE from investasi
+					where fkIdKlien = @idKlien
+
+					SET @idRecord = @idRecord - 1
+					DBCC checkident(investasi,reseed,@idRecord)
+
+					Update history Set
+					nilaiSebelum = @nilaiNominalNow
+					where fkPerubahan = @idPerubahanBefore and kolom = 'nominal'
+					
+					Update history Set 
+					nilaiSebelum = @nilaiCSNow
+					where fkPerubahan = @idPerubahanBefore and kolom = 'fkCusService'
+
+					Update perubahan Set
+					operasi = 'UNDO'
+					where
+						idPe = @idPerubahanBefore
+				END
+			ELSE
+				BEGIN
+					SET @temp = @idRecord - 1
+					DBCC checkident(investasi,reseed,@temp)
+
+					Update investasi set
+						nominal = @nilaiNominalSebelum, fkCusService = @nilaiFkCsSebelum
+					where
+						fkIdKlien = @idKlien
+
+					Update history set
+						nilaiSebelum = '' 
+					where 
+						fkPerubahan = @idPerubahanBefore and kolom = 'nominal'
+
+					update history set
+						nilaiSebelum = ''
+					where
+						fkPerubahan = @idPerubahanBefore and kolom = 'fkCusService'
+
+					update perubahan set
+						operasi = 'undo'
+					where
+						idPe = @idPerubahanBefore
+
+					SET @idLast = (
+						SELECT
+							MAX(idIvest)
+						FROM
+							investasi
+					)
+					DBCC checkident(investasi,reseed,@idLast)
+				END
+		END
+END
