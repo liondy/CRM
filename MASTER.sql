@@ -52,3 +52,13 @@ EXEC investasiInsert 1,50000,1
 	@param id CS: id CS yang melayani client, setiap CS harus mengingat id nya masing-masing (int)
 */
 EXEC investasiUpdate 1,100000,1
+
+/*
+	STORED PROCEDURE untuk MENGHAPUS data investasi klien
+	Syarat: harus terdaftar sebagai klien (pernah melakukan investasi)
+	Rencananya hanya akan dipanggil saat klien menghapus data dirinya
+	Sehingga akan dipanggil dari STORED PROCEDURE deleteKlien
+	@param idKlien: id dari klien yang mau dihapus data investasinya
+	@return: tabel yang di log ke history serta tabel investasi yang menunjukkan bahwa investasinya sudah kosong
+*/
+EXEC investasiDelete 1
