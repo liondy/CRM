@@ -1,4 +1,4 @@
-CREATE PROCEDURE KlienDelete(
+ALTER PROCEDURE KlienDelete(
 @nama VARCHAR(50)
 )
 AS
@@ -44,6 +44,7 @@ AS
 	DELETE FROM klien
 	WHERE nama = @nama
 
+
 	SELECT
 		*
 	FROM
@@ -65,4 +66,5 @@ AS
 		kolom,
 		nilaiSebelum AS 'Data klien Sebelum'
 	FROM history where kolom = 'nama'
-
+	go
+	exec KlienDelete 'sapi'
