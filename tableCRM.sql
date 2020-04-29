@@ -1,3 +1,5 @@
+CREATE PROCEDURE reset
+AS
 drop table klien
 drop table noHpklien
 drop table cusService

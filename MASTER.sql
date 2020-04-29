@@ -49,6 +49,14 @@ EXEC insertReg 'Bogor', 4
 EXEC updateReg 'Bogor', 2, 4
 
 /*
+	Stored Procedure untuk melakukan UNDO terhadap perubahan id kota
+	Saat ini fitur ini belum berfungsi dengan baik karena masih terkendala dengan beberapa hal
+	@param: -
+	@return: -
+*/
+EXEC undoRegion
+
+/*
 	Stored Procedure untuk mengupdate data customer service (INSERT / DELETE)
 	Data Customer Service tidak dapat di UPDATE karena hanya berupa nama dan ID CS
 	SP ini dapat menambah atau menghapus orang dari / ke list customer service
