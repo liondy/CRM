@@ -84,7 +84,18 @@ AS
 		if(@reg is null)
 			Begin
 				exec insertReg @namaRegion, 0
+				SELECT
+					@reg = idR
+				FROM
+					region
+				WHERE
+					namaKelompok = @namaRegion
 			end
+		
+		IF @idKK IS NULL
+		BEGIN
+			SET @idKK = 1
+		END
 
 		INSERT INTO klien(nama, alamat, tglLahir, fkRegion, fkHubungan, status, email)
 		VALUES (@nama, @alamat, @tgllahir, @reg, @idKK, 1, @email)
@@ -142,9 +153,20 @@ AS
 	
 
 	SELECT
-		*
+		Klien.idK AS 'ID KLIEN',
+		Klien.nama AS 'Nama Klien',
+		alamat,
+		tglLahir,
+		Region.namaKelompok,
+		Hubungan.posisi,
+		status AS 'Aktif',
+		email
 	FROM
-		klien
+		klien INNER JOIN Region ON
+		klien.fkRegion = Region.idR INNER JOIN Hubungan ON
+		klien.fkHubungan = Hubungan.idKK
+	WHERE
+		klien.idK = @iduser
 
 	SELECT
 		Klien.nama AS 'Nama Klien',
