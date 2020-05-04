@@ -387,15 +387,19 @@ AS
 		tabel = 'investasi' AND
 		idRecord = @idKlien
 
-alter procedure undoPerubahanInvestasi
+alter procedure undoPerubahanInvestasi(
+	@nama varchar(50)
+	@idK int
+)
 as
 	declare @idPerubahanBefore int
 	select
 		@idPerubahanBefore = max(idPe)
 	from
-		perubahan
+		perubahan join investasi on 
+			perubahan.idRecord = investasi.idIvest
 	where
-		tabel = 'investasi'
+		tabel = 'investasi' and investasi.fkIdKlien = @idK and operasi!='UNDO'
 
 	declare @idRecord int
 	select
@@ -429,6 +433,7 @@ as
 	where
 		fkPerubahan = @idPerubahanBefore and kolom = 'fkCusService'
 
+	/*
 	declare @idKlien int
 	select 
 		@idKlien = fkIdKlien
@@ -436,6 +441,7 @@ as
 		investasi
 	where
 		idIvest = @idRecord
+	*/
 
 	declare @nilaiNominalNow money
 	declare @nilaiCSNow int
