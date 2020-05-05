@@ -388,7 +388,7 @@ AS
 		idRecord = @idKlien
 
 alter procedure undoPerubahanInvestasi(
-	@nama varchar(50)
+	@nama varchar(50),
 	@idK int
 )
 as
@@ -457,17 +457,17 @@ BEGIN
 					from 
 						investasi
 					where
-						fkIdKlien = @idKlien
+						fkIdKlien = @idK
 
 					select 
 						@nilaiCSNow = fkCusService
 					from
 						investasi
 					where
-						fkIdKlien = @idKlien
+						fkIdKlien = @idK
 
 					DELETE from investasi
-					where fkIdKlien = @idKlien
+					where fkIdKlien = @idK
 
 					SET @idRecord = @idRecord - 1
 					DBCC checkident(investasi,reseed,@idRecord)
@@ -493,7 +493,7 @@ BEGIN
 					Update investasi set
 						nominal = @nilaiNominalSebelum, fkCusService = @nilaiFkCsSebelum
 					where
-						fkIdKlien = @idKlien
+						fkIdKlien = @idK
 
 					Update history set
 						nilaiSebelum = '' 

@@ -19,6 +19,16 @@ select * from history
 EXEC reset
 
 /*
+	Stored Procedure untuk mengupdate data customer service (INSERT / DELETE)
+	Data Customer Service tidak dapat di UPDATE karena hanya berupa nama dan ID CS
+	SP ini dapat menambah atau menghapus orang dari / ke list customer service
+	@param nama: nama customer service yang ingin ditambah atau dihapus (string) --> penulisan harus pakai ''
+	@param operasi: tambah atau hapus (string) --> penulisan harus pakai ''
+	return: list seluruh CS, tabel perubahan join history mengenai CS tersebut
+*/
+EXEC updateCustomerService 'Denise','tambah'
+
+/*
 skenario insert klien : 
 		@param : nama
 		@param : alamat
@@ -36,7 +46,9 @@ skenario insert klien :
 		- cek apakah user sebelumnya pernah kedaftar kedalam tabel dengan mengecek
 			1. apakah user dengan nama, tanggal lahir, dan idKK tersebut sudah ada atau tidak
 			2. jika ada tidak dapat insert
-			3. jika tidak maka insert 
+			3. jika tidak maka insert
+
+	pastikan bahwa CS sudah terdaftar
 */
 exec KlienInsert 'bebek', 'kembar', '19990520', 'Jawa Barat', 'ayah', 'tine@gmail.com', 1000, 1
 
@@ -53,7 +65,7 @@ exec KlienInsert 'bebek', 'kembar', '19990520', 'Jawa Barat', 'ayah', 'tine@gmai
 	@param perubahan : perubahan-perubahan yang ingin dilakukan dengan format di atas
 	@return data klien baru
 */
-EXEC KlienUpdate 2,'unpar;;;;bebek@gmail.com'
+EXEC KlienUpdate 1,'unpar;;;;bebek@gmail.com'
 
 /*
 	STORE PRODUCE untuk DELETE data klien
@@ -124,27 +136,6 @@ EXEC updateReg 'Bogor', 2, 4
 EXEC undoRegion
 
 /*
-	Stored Procedure untuk mengupdate data customer service (INSERT / DELETE)
-	Data Customer Service tidak dapat di UPDATE karena hanya berupa nama dan ID CS
-	SP ini dapat menambah atau menghapus orang dari / ke list customer service
-	@param nama: nama customer service yang ingin ditambah atau dihapus (string) --> penulisan harus pakai ''
-	@param operasi: tambah atau hapus (string) --> penulisan harus pakai ''
-	return: list seluruh CS, tabel perubahan join history mengenai CS tersebut
-*/
-EXEC updateCustomerService 'Denise','tambah'
-
-/*
-	STORED PROCEDURE UNDO perubahan CS Terakhir
-	Hanya bisa UNDO Perubahan terakhir untuk CS
-	Apabila tidak terakhir maka hanya mengembalikan tabel akhir saja
-	dan tidak ada perubahan
-	perubahan akan diberi keterangan UNDO dan tidak dihapus dari log agar tetap bisa ke track
-	@param: -
-	@return: list seluruh CS, tabel perubahan join history mengenai CS tersebut
-*/
-EXEC undoPerubahanCSTerakhir
-
-/*
 	STORED PROCEDURE untuk memasukkan sebuah investasi
 	Harus terdaftar sebagai klien terlebih dahulu sebelum bisa berinvestasi
 	Apabila id klien tidak terdaftar, maka SP tidak akan mengembalikan apapun.
@@ -202,3 +193,29 @@ exec hubunganInsert 3,1
 
 exec hubunganDelete 1
 
+----------------------------DANGER ZONE--------------------------------------
+
+/*
+	STORED PROCEDURE UNDO perubahan CS Terakhir
+	Hanya bisa UNDO Perubahan terakhir untuk CS
+	Apabila tidak terakhir maka hanya mengembalikan tabel akhir saja
+	dan tidak ada perubahan
+	perubahan akan diberi keterangan UNDO dan tidak dihapus dari log agar tetap bisa ke track
+	@param: -
+	@return: list seluruh CS, tabel perubahan join history mengenai CS tersebut
+*/
+EXEC undoPerubahanCSTerakhir
+
+/*
+	STORE PROCEDURE untuk meng undo perubahan investasi dari seseorang
+	Stored Procedure dapat dipanggil berkali-kali
+	SP ini akan memanggil SP undoPerubahanInvestasi
+	@param nama: nama dari klien yang ingin di undo
+	@param alamat: alamat dari klien yang ingin di undo
+	@param tglLahir: tglLahir dari klien yang ingin di undo
+	@param email: email dari klien yang ingin di undo
+	@return: tabel investasi yang diundo
+	@return: tabel perubahan yang diundo
+	@return: tabel history yang diundo
+*/
+exec undoInvestasi 'bebek','unpar', '1999-05-20', 'bebek@gmail.com'
