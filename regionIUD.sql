@@ -183,7 +183,7 @@ as
 				where 
 				namaKelompok = @namaRegion AND 
 				idParent = @idParLama AND
-				idR = @idReg
+				idR = @idRegion
 
 			/* kalo cuman update sepertinya idR nya ga akan berubah
 			SET @idReg = (
@@ -264,7 +264,7 @@ from history
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-create procedure undoRegion(
+alter procedure undoPerubahanRegion(
 	@idR int
 )
 as
@@ -326,23 +326,18 @@ as
 					idR = @idRecord
 			)
 
-			/* sepertinya kalo nilai parent sebelumnya kosong, 
-				berarti dia baru si insert kalo undo jangan langsung di hilangin
-				recordnya tapi ubah idParent nya jadi kosong aja
 			DELETE FROM region
-			WHERE idParent = @idRecord
-			*/
-
+			WHERE idR = @idRecord
+		
+			/*
 			update region set
 			idParent = -1
 			where
 			idR = @idR
-			
-			/* karena record sebelumnya ga dihapus tapi di update
-				idRecord tidak berkurang
+			*/
+
 			SET @idRecord = @idRecord - 1
 			DBCC checkident(region,reseed,@idRecord)
-			*/
 
 			UPDATE History
 			SET
@@ -387,69 +382,27 @@ as
 			WHERE
 				idPe = @idPerubahanParentB
 
-			/*
+			
 			SET @idxTerakhir = (
 				SELECT
 					MAX(idR)
 				FROM
 					region
 			)
+			if @idxTerakhir is NULL
+			BEGIN
+				set @idxTerakhir = 0
+			END
 			DBCC checkident(region,reseed,@idxTerakhir)
-			*/
 		END
 	END
-
-	SELECT
-		idParent AS 'Id Parent',
-		namaKelompok AS 'Nama Region'
-	FROM
-		region
-	where 
-		idR = @idR
-
-	SELECT
-		idPe AS 'id Perubahan',
-		waktu,
-		tabel,
-		idRecord AS 'id Parent',
-		operasi
-	FROM
-		Perubahan
-	WHERE 
-		tabel = 'region'
-
-	SELECT
-		fkPerubahan AS 'id Perubahan',
-		kolom,
-		nilaiSebelum AS 'Data id Parent Sebelum'
-	FROM history where kolom = 'idParent'
 GO
 
+select * 
+from region
 
+exec insertReg cikarang,4
+exec updateReg cikarang,4,5
 
---undo belum beres karena operasi undo masuk ke table perubahan tapi di table regionya sendiri nilai idParentnya(yang harusnya berubah) tidak ke ubah 
-alter PROCEDURE checkIdKota
-	@namaRegion varchar(50)
-AS
-	declare @idR int
-	set @idR(
-	SELECT
-		MIN(idR)
-	FROM
-		Region
-	WHERE
-		namaKelompok = @namaRegion
-	)
-BEGIN
-	if(@idR is not null)
-		BEGIN
-			select @idR
-		END
-END
-exec checkIdKota 'jawa barat'
-
-exec insertReg bogor,2
-exec updateReg bogor,2,5
-exec undoRegion 8
 
 
