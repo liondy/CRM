@@ -137,15 +137,15 @@ alter procedure updateReg(
 	@idParBaru int
 )
 as
-	DECLARE @idRegion int
+	DECLARE @idRegion int --untuk mendapatkan idReg dari param @namaRegion dan @parLama
 	DECLARE @idReg int
 	SET @idRegion = (
-		SELECT TOP 1
+		SELECT
 			idR
 		FROM
 			Region
 		WHERE
-			namaKelompok = @namaRegion
+			namaKelompok = @namaRegion and idParent = @idParLama
 	)
 	IF @idRegion IS NOT NULL
 	BEGIN
@@ -168,19 +168,24 @@ as
 				idParent = @idParBaru AND
 				namaKelompok = @namaRegion
 		)
-
-		IF @idParLama != @idParBaru AND @idR IS NULL
+	
+		IF @idParLama != @idParBaru AND @idR IS NULL 
 		BEGIN
 			select
 				@parentBefore = region.idParent
 			from
 				region
 			where
-				region.namaKelompok = @namaRegion1 AND region.idParent = @idParLama
+				region.namaKelompok = @namaRegion AND region.idParent = @idParLama
+
 			update region
 				set idParent = @idParBaru
-				where namaKelompok = @namaRegion AND idParent = @idParLama
+				where 
+				namaKelompok = @namaRegion AND 
+				idParent = @idParLama AND
+				idR = @idReg
 
+			/* kalo cuman update sepertinya idR nya ga akan berubah
 			SET @idReg = (
 				SELECT
 					idR
@@ -190,12 +195,13 @@ as
 					namaKelompok = @namaRegion AND
 					idParent = @idParBaru
 			)
+			*/
 
 			INSERT INTO perubahan(
 				waktu, idRecord, operasi, tabel 
 			)
 			VALUES(
-				@curDate, @idReg, 'UPDATE', 'Region'
+				@curDate, @idRegion, 'UPDATE', 'Region'
 			)
 
 			--mendapat idPerubahan yang paling baru yang barusan di insert
@@ -204,7 +210,7 @@ as
 			from
 				perubahan
 			where
-				perubahan.waktu = @curDate AND perubahan.idRecord = @idR
+				perubahan.waktu = @curDate AND perubahan.idRecord = @idRegion
 
 			INSERT INTO history(
 				fkPerubahan,kolom, tipeData, nilaiSebelum
@@ -228,7 +234,7 @@ as
 	FROM
 		Region R
 	WHERE
-		R.idR = @idReg
+		R.idR = @idRegion
 
 	SELECT
 		idPe AS 'id Perubahan',
@@ -243,7 +249,7 @@ as
 		History.fkPerubahan = Perubahan.idPe
 	WHERE
 		tabel = 'Region' AND
-		idRecord = @idReg
+		idRecord = @idRegion
 
 EXEC updateReg 'Bogor', 2, 4
 
@@ -258,16 +264,18 @@ from history
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-alter procedure undoRegion
+create procedure undoRegion(
+	@idR int
+)
 as
 	DECLARE
-		@idPerubahanParentB int,
-		@nilaiSebelum varchar(50),
-		@idRecord int,
-		@lastNilai varchar(50),
+		@idPerubahanParentB int, --idPerubahan before
+		@nilaiSebelum varchar(50), --parent before
+		@idRecord int, --baris record pada region before
+		@lastNilai varchar(50), --parent sekarang
 		@idxTerakhir int,
 		@temp int,
-		@operasiTerakhir varchar(50)
+		@operasiTerakhir varchar(50) --operasi pada perubahan before
 
 	SET @idPerubahanParentB = (
 		SELECT
@@ -275,7 +283,7 @@ as
 		FROM
 			Perubahan
 		WHERE
-			tabel = 'region'
+			tabel = 'region' and operasi != 'UNDO'
 	)
 
 	SET @idRecord = (
@@ -293,7 +301,7 @@ as
 		FROM
 			History
 		WHERE
-			fkPerubahan = @idPerubahanParentB
+			fkPerubahan = @idPerubahanParentB and kolom = 'idParent'
 	)
 
 	SET @operasiTerakhir = (
@@ -315,20 +323,32 @@ as
 				FROM
 					region
 				WHERE
-					idParent = @idRecord
+					idR = @idRecord
 			)
 
+			/* sepertinya kalo nilai parent sebelumnya kosong, 
+				berarti dia baru si insert kalo undo jangan langsung di hilangin
+				recordnya tapi ubah idParent nya jadi kosong aja
 			DELETE FROM region
 			WHERE idParent = @idRecord
+			*/
 
+			update region set
+			idParent = -1
+			where
+			idR = @idR
+			
+			/* karena record sebelumnya ga dihapus tapi di update
+				idRecord tidak berkurang
 			SET @idRecord = @idRecord - 1
 			DBCC checkident(region,reseed,@idRecord)
+			*/
 
 			UPDATE History
 			SET
 				nilaiSebelum = @lastNilai
 			WHERE
-				idH = @idPerubahanParentB
+				idH = @idPerubahanParentB and kolom = 'idParent'
 
 			UPDATE Perubahan
 			SET
@@ -341,15 +361,25 @@ as
 			SET @temp = @idRecord - 1
 			DBCC checkident(region,reseed,@temp)
 
+			/* kalo dia pernah di update sebelumnya
+				berarti dia bukan insert tapi update
+				dengan mengubah idParent sekarang menjadi
+				idParent yang di history
 			INSERT INTO region (idParent)
 			values (@idPerubahanParentB)
 			SELECT @nilaiSebelum
+			*/
+
+			Update region set
+			idParent = @nilaiSebelum
+			where
+			idR = @idR 
 
 			UPDATE History
 			SET
 				nilaiSebelum = ''
 			WHERE
-				fkPerubahan = @idPerubahanParentB
+				fkPerubahan = @idPerubahanParentB and kolom = 'idParent'
 
 			UPDATE Perubahan
 			SET
@@ -357,6 +387,7 @@ as
 			WHERE
 				idPe = @idPerubahanParentB
 
+			/*
 			SET @idxTerakhir = (
 				SELECT
 					MAX(idR)
@@ -364,6 +395,7 @@ as
 					region
 			)
 			DBCC checkident(region,reseed,@idxTerakhir)
+			*/
 		END
 	END
 
@@ -372,6 +404,8 @@ as
 		namaKelompok AS 'Nama Region'
 	FROM
 		region
+	where 
+		idR = @idR
 
 	SELECT
 		idPe AS 'id Perubahan',
@@ -388,18 +422,34 @@ as
 		fkPerubahan AS 'id Perubahan',
 		kolom,
 		nilaiSebelum AS 'Data id Parent Sebelum'
-	FROM history where kolom = 'nama'
+	FROM history where kolom = 'idParent'
 GO
 
-exec undoRegion
+
 
 --undo belum beres karena operasi undo masuk ke table perubahan tapi di table regionya sendiri nilai idParentnya(yang harusnya berubah) tidak ke ubah 
-ALTER PROCEDURE checkIdKota
+alter PROCEDURE checkIdKota
 	@namaRegion varchar(50)
 AS
+	declare @idR int
+	set @idR(
 	SELECT
 		MIN(idR)
 	FROM
 		Region
 	WHERE
 		namaKelompok = @namaRegion
+	)
+BEGIN
+	if(@idR is not null)
+		BEGIN
+			select @idR
+		END
+END
+exec checkIdKota 'jawa barat'
+
+exec insertReg bogor,2
+exec updateReg bogor,2,5
+exec undoRegion 8
+
+
