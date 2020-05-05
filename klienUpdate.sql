@@ -65,7 +65,7 @@ AS
 				SET @trimKata = SUBSTRING(@perubahan,@it,@commaidx-@it)
 				SET @it = @commaidx + 1
 			END
-			IF @it = 1 AND @trimKata != ''
+			IF @i = 1 AND @trimKata != ''
 			BEGIN
 				SET @query = CONCAT(@query,'alamat = ''',@trimKata,''', ')
 				SET @nilaiSebelum = (
@@ -80,7 +80,7 @@ AS
 				SELECT
 					@idPerubahan,'alamat','varchar(50)',@nilaiSebelum
 			END
-			ELSE IF @it = 2 AND @trimKata != ''
+			ELSE IF @i = 2 AND @trimKata != ''
 			BEGIN
 				SET @fkRegion = (
 					SELECT
@@ -108,7 +108,7 @@ AS
 				SELECT
 					@idPerubahan,'fkRegion','varchar(50)',@nilaiSebelum
 			END
-			ELSE IF @it = 3 AND @trimKata != ''
+			ELSE IF @i = 3 AND @trimKata != ''
 			BEGIN
 				EXEC hubunganDelete @idK
 				SET @fkHubungan = (
@@ -132,7 +132,7 @@ AS
 				SELECT
 					@idPerubahan,'fkHubungan','varchar(50)',@nilaiSebelum
 			END
-			ELSE IF @it = 4 AND @trimKata != ''
+			ELSE IF @i = 4 AND @trimKata != ''
 			BEGIN
 				SET @query = CONCAT(@query,'status = ''',@trimKata,''', ')
 				SET @nilaiSebelum = (
@@ -147,9 +147,9 @@ AS
 				SELECT
 					@idPerubahan,'status','int',@nilaiSebelum
 			END
-			ELSE IF @it = 5 AND @trimKata != ''
+			ELSE IF @i = 5 AND @trimKata != ''
 			BEGIN
-				SET @query = CONCAT(@query,'email = ''',@trimKata,''' ')
+				SET @query = CONCAT(@query,'email = ''',@trimKata,''', ')
 				SET @nilaiSebelum = (
 					SELECT
 						email
@@ -164,9 +164,10 @@ AS
 			END
 			SET @i = @i + 1
 		END
-		SET @query = CONCAT(@query,'WHERE idK = ',@idK)
-		SELECT @query
-		--EXEC sp_executesql @query
+		SET @query = substring(@query, 1, (LEN(@query)-1))
+		SET @query = CONCAT(@query,' WHERE idK = ',@idK)
+		--SELECT @query
+		EXEC sp_executesql @query
 	END
 	SELECT
 		*
@@ -182,4 +183,4 @@ AS
 	WHERE
 		idUser = @idK
 GO
-EXEC KlienUpdate 2,'unpar;;;bebek@gmail.com'
+EXEC KlienUpdate 1,'unpar;;;;bebek@gmail.com'
