@@ -12,37 +12,72 @@ as
 	declare @idPerubahan int
 	declare @idP int
 	declare @idPP int
+	declare @idRec int
 
+	--dapetin terlebih dahulu idR untuk nama daerah tersebut
+	SET @idReg = (
+		SELECT
+			DISTINCT (idR)
+		FROM
+			region
+		WHERE
+			namaKelompok = @namaRegion
+	)
+
+	--kalau idReg nya NULL (belum pernah ada nama daerah tersebut)
+	IF @idReg IS NULL
+	BEGIN
+		--ambil id reg terbesar sekarang ditambah 1
+		SET @idReg = (
+			SELECT
+				MAX(idR) + 1
+			FROM
+				region
+		)
+		--kalau masih NULL juga, berarti emang nama daerah paling pertama
+		IF @idReg IS NULL
+		BEGIN
+			SET @idReg = 1
+		END
+	END
+	--sampe sini, idReg nya pasti udah keiisi sama angka yang menandakan idReg si nama daerah ini
+
+	--cek ID Parent nya harus ada dulu
 	SET @idP = (
 		SELECT
-			idR
+			DISTINCT(idR)
 		FROM
 			Region
 		WHERE
 			idR = @idPar
 	)
+	--kalau gada idParent nya, berarti salah input, lgsung keluar dari SP
 
+	--cek apakah sudah ada nama daerah dan id parent yang sama dalam tabel
 	SET @idPP = (
 		SELECT
-			idParent
+			idRecord
 		FROM
 			Region
 		WHERE
 			namaKelompok = @namaRegion AND
 			idParent = @idPar
 	)
+	--kalau ada yg sama (ngembaliin record), berarti udah ada dan gausa dimasukkin lagi, lgsung keluar dari SP
+	--kalau belum ada (NULL), berarti valid untuk dimasukkan
 
-	IF (@idPP IS NULL OR @idPP != @idPar) AND @idP IS NOT NULL OR @idPar = 0
+	IF @idPP IS NULL AND @idP IS NOT NULL
 	BEGIN
 		INSERT INTO region(
-			namaKelompok, idParent
+			idR, namaKelompok, idParent
 		)
 		VALUES (
-			@namaRegion, @idPar
+			@idReg, @namaRegion, @idPar
 		)
 
+		--ambil record paling terakhir (artinya paling baru dimasukkin)
 		select 
-			@idReg = region.idR
+			@idRec = MAX(region.idRecord)
 		from 
 			region
 		where
@@ -52,7 +87,7 @@ as
 			waktu, idRecord, Operasi, tabel
 		)
 		VALUES(
-			@curDateTime, @idReg, 'INSERT', 'Region'
+			@curDateTime, @idRec, 'INSERT', 'Region'
 		)
 		
 		select
@@ -60,13 +95,20 @@ as
 		from
 			perubahan
 		where 
-			perubahan.waktu = @curDateTime and perubahan.idRecord = @idReg
+			perubahan.waktu = @curDateTime and perubahan.idRecord = @idRec
 
 		INSERT INTO history(
 			fkPerubahan, kolom, tipeData, nilaiSebelum
 		)
 		VALUES(
-			@idPerubahan, 'namaKelompok', 'int', '0'
+			@idPerubahan, 'idR', 'int', '0'
+		)
+
+		INSERT INTO history(
+			fkPerubahan, kolom, tipeData, nilaiSebelum
+		)
+		VALUES(
+			@idPerubahan, 'namaKelompok', 'varchar', ''
 		)
 
 		INSERT INTO history(
@@ -92,7 +134,7 @@ as
 			R.idR AS 'id Region',
 			R.namaKelompok AS 'Nama Daerah',
 			(SELECT
-				namaKelompok
+				DISTINCT(namaKelompok)
 			FROM
 				Region
 			WHERE
@@ -104,9 +146,9 @@ as
 			R.namaKelompok = @namaRegion
 	END
 
-	SET @idReg = (
+	SET @idRec = (
 		SELECT
-			MAX(idR)
+			MAX(idRecord)
 		FROM
 			Region
 		WHERE
@@ -126,6 +168,6 @@ as
 		History.fkPerubahan = Perubahan.idPe
 	WHERE
 		tabel = 'Region' AND
-		idRecord = @idReg
-
-EXEC insertReg 'Sulawesi Selatan', 0
+		idRecord = @idRec
+GO
+--EXEC insertReg 'Sulawesi Selatan', 0

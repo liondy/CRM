@@ -60,8 +60,14 @@ Untuk membatalkan perubahan yang terjadi pada Investasi Klien dengan setiap klie
 SP yang dipanggil saat seorang CS ingin membatalkan perubahan yang terjadi dengan cara mengambil terlebih dahulu data-data klien yang ingin dibatalkan agar tidak salah. Kemudian SP akan secara otomatis mencari ID Klien yang ingin dibatalkan untuk selanjutnya dijalankan SP InvestasiUndoInner.sql yang akan membalikkan data seperti sebelumnya.
 
 ## Region
-- RegionInsert.sql <br>
+- RegionInsertInner.sql <br>
 Untuk memasukkan sebuah daerah baru dari seorang klien / calon klien. SP ini dipanggil saat memasukkan data klien baru apabila daerah calon klien belum terdaftar pada sistem atau klien yang mengubah daerahnya dan daerah baru ini belum terdaftar pada sistem <br>
+Jadi, SP insertReg pada RegionInsertInner.sql ini akan dipanggil pada: <br>
+1. Dipanggil dari SP KlienInsert apabila daerah yang ditinggali calon klien belum terdaftar di basis data. <br>
+2. Dipanggil dari SP insertRegion pada RegionInsertOuter.sql apabila manajer ingin menambahkan data daerah beserta termasuk kelompok mananya.
+
+- RegionInsertOuter.sql <br>
+SP ini digunakan untuk memasukkan suatu region baru beserta parent nya. Tidak seperti saat memasukkan sebuah region pada saat ada klien baru, SP ini mengharuskan ada nama kelompoknya, apabila tidak ada nama kelompoknya, maka SP akan otomatis langsung keluar. SP ini akan memanggil SP insertReg pada RegionInsertInner.sql
 
 - RegionUpdate.sql <br>
 Untuk memperbaharui kelompok suatu daerah. SP ini idealnya hanya dipegang oleh Manajer untuk mengubah suatu daerah tergabung pada kelompok yang mana. Suatu daerah dapat tergabung dalam lebih dari satu kelompok <br>

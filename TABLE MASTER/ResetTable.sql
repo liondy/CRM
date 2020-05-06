@@ -1,4 +1,4 @@
-CREATE PROCEDURE reset
+ALTER PROCEDURE reset
 AS
 	drop table klien
 	drop table noHpklien
@@ -41,8 +41,8 @@ AS
 	)
 
 	create table [region](
-		[idR] [int]  IDENTITY(1,1) PRIMARY KEY,
-		[idRegion] [int] NOT NULL,
+		[idRecord] [INT] IDENTITY(1,1) PRIMARY KEY,
+		[idR] [int]  NOT NULL,
 		[namaKelompok] [varchar] (50) NOT NULL,
 		[idParent] [int] NOT NULL
 	)

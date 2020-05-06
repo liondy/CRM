@@ -111,10 +111,10 @@ EXEC checkIdKota 'Bandung'
 	Region yang tidak memiliki parent dapat diisi dengan 0 untuk parent nya.
 	Syarat: id parent harus ada di dalam basis data (kecuali tidak punya daerah, langsung tulis 0 saja)
 	@param namaDaerah: nama daerah yang ingin dimasukkan ke dalam basis data (string) --> penulisan harus pakai ''
-	@param idParent: id dari daerah yang akan menjadi parent daerah tersebut (int)
+	@param namaKelompok: nama daerah yang akan menjadi parent daerah tersebut (string) --> penulisan harus pakai ''
 	@return: tabel daerah yang baru saja dimasukan serta nama parent nya serta tabel log nya
 */
-EXEC insertReg 'Bogor', 4
+EXEC insertRegion 'Bogor','Jawa Barat'
 
 /*
 	Stored Procedure untuk melakukan update terhadap region yang ada
