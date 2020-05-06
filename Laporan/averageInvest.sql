@@ -50,7 +50,7 @@ as
 					investasi.fkIdKlien = klien.idK join region on
 						klien.fkRegion = region.idR
 			where
-				@tempRegion = region.idR
+				@tempRegion = region.idR and klien.status!=0 
 			group by 
 				region.namaKelompok
 
