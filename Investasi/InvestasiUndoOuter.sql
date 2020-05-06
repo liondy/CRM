@@ -55,3 +55,6 @@ as
 				Perubahan.idRecord = @idInvest
 		END
 	END
+
+
+

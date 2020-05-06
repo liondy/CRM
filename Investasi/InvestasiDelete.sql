@@ -103,7 +103,8 @@ AS
 				@idPerubahan, 'fkCusService','int', @cusSerBefore
 			)
 	
-			DELETE FROM investasi
+			UPDATE investasi set
+			nominal = 0
 			WHERE investasi.fkIdKlien = @idKlien
 		END
 	END

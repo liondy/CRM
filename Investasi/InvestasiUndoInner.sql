@@ -67,11 +67,9 @@ BEGIN
 					where
 						fkIdKlien = @idK
 
-					DELETE from investasi
+					UPDATE investasi set
+					nominal = 0, fkCusService = 0
 					where fkIdKlien = @idK
-
-					SET @idRecord = @idRecord - 1
-					DBCC checkident(investasi,reseed,@idRecord)
 
 					Update history Set
 					nilaiSebelum = @nilaiNominalNow
@@ -82,15 +80,16 @@ BEGIN
 					where fkPerubahan = @idPerubahanBefore and kolom = 'fkCusService'
 
 					Update perubahan Set
-					operasi = 'UNDO'
+					operasi = 'UNDO' 
 					where
 						idPe = @idPerubahanBefore
 				END
 			ELSE
 				BEGIN
-					SET @temp = @idRecord - 1
-					DBCC checkident(investasi,reseed,@temp)
-
+					if(@nilaiFkCsSebelum is null)
+						begin
+							set @nilaiFkCsSebelum = 0
+						end
 					Update investasi set
 						nominal = @nilaiNominalSebelum, fkCusService = @nilaiFkCsSebelum
 					where
@@ -110,18 +109,7 @@ BEGIN
 						operasi = 'undo'
 					where
 						idPe = @idPerubahanBefore
-
-					SET @idLast = (
-						SELECT
-							MAX(idIvest)
-						FROM
-							investasi
-					)
-					IF @idLast IS NULL
-					BEGIN
-						SET @idLast = 0
-					END
-					DBCC checkident(investasi,reseed,@idLast)
 				END
 		END
 END
+
