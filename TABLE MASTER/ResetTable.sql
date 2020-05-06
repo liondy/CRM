@@ -42,6 +42,7 @@ AS
 
 	create table [region](
 		[idR] [int]  IDENTITY(1,1) PRIMARY KEY,
+		[idRegion] [int] NOT NULL,
 		[namaKelompok] [varchar] (50) NOT NULL,
 		[idParent] [int] NOT NULL
 	)

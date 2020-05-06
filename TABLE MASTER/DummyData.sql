@@ -52,11 +52,11 @@ insert into hubungan (idKK,idUser, posisi) select 6, 9, 'anak kedua'
 insert into hubungan (idKK,idUser, posisi) select 2, 10, 'ayah'
 
 --anggap parent root adalah Indonesia
-insert into region (namaKelompok, idParent) select 'Indonesia', 0
-insert into region (namaKelompok, idParent) select 'Jawa Barat', 1
-insert into region (namaKelompok, idParent) select 'Sumatera uUtara', 2
-insert into region (namaKelompok, idParent) select 'Jakarta', 1
-insert into region (namaKelompok, idParent) select 'Region A', 3
+insert into region (idRegion, namaKelompok, idParent) select 1, 'Indonesia', 0
+insert into region (idRegion, namaKelompok, idParent) select 2, 'Jawa Barat', 1
+insert into region (idRegion, namaKelompok, idParent) select 3, 'Sumatera uUtara', 2
+insert into region (idRegion, namaKelompok, idParent) select 4, 'Jakarta', 1
+insert into region (idRegion, namaKelompok, idParent) select 5, 'Region A', 3
 
 --dummy data untuk investasi
 insert into investasi (fkIdKlien, nominal, waktu, fkCusService) select 1, 200000, '20190407 15:20:01 PM', 1
