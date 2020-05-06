@@ -143,11 +143,9 @@ AS
 			INSERT INTO history (fkPerubahan, kolom, tipeData, nilaiSebelum)
 			VALUES (@idPerubahanHub, 'posisi', 'varchar(20)', @posisi)
 
-			DELETE FROM klien
+			UPDATE klien set
+			status = 0
 			WHERE nama = @nama and idK = @idK
-			
-			DELETE FROM hubungan
-			WHERE idUser = @idK and idKK = @idKK
 		END
 
 	
@@ -174,3 +172,7 @@ AS
 	FROM history where kolom = 'nama'  
 	go
 	exec KlienDelete 'tine', 14
+
+
+	
+
