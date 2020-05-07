@@ -37,7 +37,7 @@ as
 					investasi.fkIdKlien = klien.idK join region on
 						klien.fkRegion = region.idR
 			where
-				@tempRegion = region.idR and klien.status!=0
+				@tempRegion = region.idR and klien.status!=0 and nominal!=0
 			group by 
 				region.namaKelompok, klien.nama, investasi.nominal
 			order by nominal desc
