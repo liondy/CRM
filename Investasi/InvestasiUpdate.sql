@@ -1,5 +1,8 @@
 ALTER PROCEDURE investasiUpdate(
-	@IdKlien int,
+	@nama varchar(50),
+	@alamat varchar(50),
+	@tgllahir datetime,
+	@namaRegion varchar(50),
 	@nominal money,
 	@fkCusSer int
 )
@@ -15,6 +18,26 @@ AS
 	declare @tempLatestDate datetime --ambil tanggal perubahan terakhir
 	declare @tempFKcusBefore int --ambil fkcus yang sebelum nya melayani klien 
 	declare @idCs int --cek cs nya valid atau tidak
+	declare @idKlien INT
+
+	SET @idKlien = (
+		select
+			idK
+		from
+			klien
+		where 
+			nama = @nama and 
+			alamat = @alamat AND
+			tglLahir = @tglLahir AND
+			fkRegion = (
+				SELECT
+					DISTINCT(idR)
+				FROM
+					Region
+				WHERE
+					namaKelompok = @namaRegion
+			)
+	)
 
 	SET @idInv = (
 		SELECT

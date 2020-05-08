@@ -135,11 +135,14 @@ EXEC updateReg 'Bogor', 2, 4
 	STORED PROCEDURE untuk mengupdate investasi seseorang
 	Syarat: harus pernah melakukan investasi terlebih dahulu
 	Investasi sebelumnya akan di update nilainya jadi investasi yang dimasukin
-	@param idKlien: klien yang ingin melakukan investasi, investasi klien sebelumnya akan di update (int)
+	@param nama: nama klien yang ingin melakukan investasi, investasi klien sebelumnya akan di update (int)
+	@param alamat: alamat klien yang ingin melakukan investasi (string)
+	@param tglLahir: tgl lahir klien yang ingin melakukan investasi (string)
+	@param namaRegion: tempat tinggal klien yang ingin melakukan investasi (string)
 	@param nominal: nominal terbaru klien yang ingin di update (money)
 	@param id CS: id CS yang melayani client, setiap CS harus mengingat id nya masing-masing (int)
 */
-EXEC investasiUpdate 1,100000,1
+EXEC investasiUpdate 'bebek','kembar','19990520','Jawa Barat',100000,1
 
 -----------------------------------FEATURES-------------------------------------------------------
 
