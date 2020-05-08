@@ -42,17 +42,6 @@ as
 	END
 	--sampe sini, idReg nya pasti udah keiisi sama angka yang menandakan idReg si nama daerah ini
 
-	--cek ID Parent nya harus ada dulu
-	SET @idP = (
-		SELECT
-			DISTINCT(idR)
-		FROM
-			Region
-		WHERE
-			idR = @idPar
-	)
-	--kalau gada idParent nya, berarti salah input, lgsung keluar dari SP
-
 	--cek apakah sudah ada nama daerah dan id parent yang sama dalam tabel
 	SET @idPP = (
 		SELECT
@@ -65,8 +54,7 @@ as
 	)
 	--kalau ada yg sama (ngembaliin record), berarti udah ada dan gausa dimasukkin lagi, lgsung keluar dari SP
 	--kalau belum ada (NULL), berarti valid untuk dimasukkan
-
-	IF @idPP IS NULL AND @idP IS NOT NULL
+	IF @idPP IS NULL
 	BEGIN
 		INSERT INTO region(
 			idR, namaKelompok, idParent

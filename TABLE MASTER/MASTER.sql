@@ -51,6 +51,8 @@ skenario insert klien :
 	pastikan bahwa CS sudah terdaftar
 */
 exec KlienInsert 'bebek', 'kembar', '19990520', 'Jawa Barat', 'ayah', 'tine@gmail.com', 1000, 1
+exec KlienInsert 'duck', 'kembar', '19321215', 'Jawa Barat', 'ibu', 'duck@gmail.com', 10, 1
+exec KlienInsert 'macan', 'kembar', '19970101', 'Medan', 'anak pertama', 'macan@gmail.com', 5, 1
 
 /*
 	Stored Procedure untuk mengupdate seorang klien
