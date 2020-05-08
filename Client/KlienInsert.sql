@@ -74,10 +74,27 @@ AS
 
 	SET @idKK = (
 		SELECT
-			MAX(idKK) + 1
+			DISTINCT(fkHubungan)
 		FROM
-			Hubungan
+			Klien
+		WHERE
+			alamat = @alamat
 	)
+
+	IF @idKK IS NULL
+	BEGIN
+		SET @idKK = (
+			SELECT
+				MAX(idKK) + 1
+			FROM
+				Hubungan
+		)
+
+		IF @idKK IS NULL
+		BEGIN
+			SET @idKK = 1
+		END
+	END
 
 	IF (@iduser is null and @idCS is not null)
 	BEGIN
@@ -91,11 +108,6 @@ AS
 				WHERE
 					namaKelompok = @namaRegion
 			end
-		
-		IF @idKK IS NULL
-		BEGIN
-			SET @idKK = 1
-		END
 
 		INSERT INTO klien(nama, alamat, tglLahir, fkRegion, fkHubungan, status, email)
 		VALUES (@nama, @alamat, @tgllahir, @reg, @idKK, 1, @email)
