@@ -156,7 +156,7 @@ EXEC investasiUpdate 'bebek','kembar','19990520','Jawa Barat',100000,1
     tabel berupa:
     namaKlien, no HP 1, no HP 2, email, terakhir investasi, lama bulan
 */
-EXEC cariKlienLebihDariTigaBulan
+EXEC cariKlienSudahLamaTidakInvestasi
 
 /*
 	sp yang digunakan untuk membuat laporan rata rata investasi tiap daerah

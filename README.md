@@ -94,5 +94,5 @@ Mencari rata-rata investasi klien dari semua daerah <br>
 - laporanInvestMaxMin.sql <br>
 Mencari investasi tertinggi dan terendah dari seluruh daerah
 
-- cariKlienLebihDariTigaBulan <br>
-Mencari klien yang melakukan investasi terakhir lebih dari tiga bulan yang lalu agar dapat dihubungi oleh pihak perusahaan agar melakukan investasi kembali. Ini berguna untuk menjaga relasi antara klien dan perusahaan
+- cariKlienSudahLamaTidakInvestasi <br>
+Mencari klien yang sudah lama tidak melakukan investasi (terakhir lebih dari tiga bulan yang lalu) agar dapat dihubungi oleh pihak perusahaan agar melakukan investasi kembali. Ini berguna untuk menjaga relasi antara klien dan perusahaan

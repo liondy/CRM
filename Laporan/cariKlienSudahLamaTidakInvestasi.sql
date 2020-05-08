@@ -1,14 +1,14 @@
 /*
-    STORED PROCEDURE untuk mencari klien yang sudah tidak aktif selama tiga bulan lebih
-    Klien yang ditampilkan adalah klien yang berinvestasi tiga bulan yang lalu
-    Program akan mencari klien yang terakhir berinvestasi tiga bulan yang lalu
+    STORED PROCEDURE untuk mencari klien yang sudah lama tidak melakukan investasi (terakhir lebih dari tiga bulan yang lalu)
+    Klien yang ditampilkan adalah klien yang berinvestasi lebih dari tiga bulan yang lalu
+    Program akan mencari klien yang terakhir berinvestasi lebih dari tiga bulan yang lalu
     dan akan menampilkan telepon serta alamat emailnya agar perusahaan dapat menghubungi client
     @param: tidak ada
     @return: seluruh klien aktif yang sudah tidak melakukan investasi selama tiga bulan terakhir
     tabel berupa:
     namaKlien, no HP 1, no HP 2, email, terakhir investasi, lama bulan
 */
-ALTER PROCEDURE cariKlienLebihDariTigaBulan
+CREATE PROCEDURE cariKlienSudahLamaTidakInvestasi
 AS
     DECLARE @tbResult TABLE(
         Nama VARCHAR(50),
