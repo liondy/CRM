@@ -78,7 +78,8 @@ AS
 		FROM
 			Klien
 		WHERE
-			alamat = @alamat
+			alamat = @alamat AND
+			fkRegion = @reg
 	)
 
 	IF @idKK IS NULL
@@ -99,15 +100,15 @@ AS
 	IF (@iduser is null and @idCS is not null)
 	BEGIN
 		if(@reg is null)
-			Begin
-				exec insertReg @namaRegion, 0
-				SELECT
-					@reg = idR
-				FROM
-					region
-				WHERE
-					namaKelompok = @namaRegion
-			end
+		Begin
+			exec insertReg @namaRegion, 0
+			SELECT
+				@reg = idR
+			FROM
+				region
+			WHERE
+				namaKelompok = @namaRegion
+		end
 
 		INSERT INTO klien(nama, alamat, tglLahir, fkRegion, fkHubungan, status, email)
 		VALUES (@nama, @alamat, @tgllahir, @reg, @idKK, 1, @email)
