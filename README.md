@@ -28,6 +28,7 @@ HubunganDelete hanya dipanggil apabila seseorang sudah pindah kartu keluarga (mi
 
 - KlienDelete.sql <br>
 Untuk mengubah data klien menjadi tidak aktif lagi (misal berhenti berinvestasi atau meninggal) <br>
+Memanggil SP hubunganDelete
 
 ## Customer Service
 - CSUpdate.sql <br>
@@ -93,3 +94,6 @@ Mencari rata-rata investasi klien dari semua daerah <br>
 
 - laporanInvestMaxMin.sql <br>
 Mencari investasi tertinggi dan terendah dari seluruh daerah
+
+- cariKlienLebihDariTigaBulan <br>
+Mencari klien yang melakukan investasi terakhir lebih dari tiga bulan yang lalu agar dapat dihubungi oleh pihak perusahaan agar melakukan investasi kembali. Ini berguna untuk menjaga relasi antara klien dan perusahaan

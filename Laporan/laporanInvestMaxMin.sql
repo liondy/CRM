@@ -66,5 +66,3 @@ as
 		deallocate curRegion
 
 		select * from @tableLaporan
-
-exec laporanInvestMaxMin

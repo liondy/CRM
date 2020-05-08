@@ -62,9 +62,3 @@ as
 
 		select * 
 		from @regionTable
-
-exec averageInvest
-
-
-
-

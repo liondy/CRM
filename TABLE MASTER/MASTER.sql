@@ -18,6 +18,8 @@ select * from history
 */
 EXEC reset
 
+------------------------------------------IUD FEATURES-----------------------------------------------------
+
 /*
 	Stored Procedure untuk mengupdate data customer service (INSERT / DELETE)
 	Data Customer Service tidak dapat di UPDATE karena hanya berupa nama dan ID CS
@@ -112,8 +114,6 @@ EXEC checkIdKota 'Bandung'
 /*
 	Stored Procedure untuk menambahkan sebuah region
 	Suatu region bisa memiliki parent
-	Region yang tidak memiliki parent dapat diisi dengan 0 untuk parent nya.
-	Syarat: id parent harus ada di dalam basis data (kecuali tidak punya daerah, langsung tulis 0 saja)
 	@param namaDaerah: nama daerah yang ingin dimasukkan ke dalam basis data (string) --> penulisan harus pakai ''
 	@param namaKelompok: nama daerah yang akan menjadi parent daerah tersebut (string) --> penulisan harus pakai ''
 	@return: tabel daerah yang baru saja dimasukan serta nama parent nya serta tabel log nya
@@ -132,24 +132,6 @@ EXEC insertRegion 'Bogor','Jawa Barat'
 EXEC updateReg 'Bogor', 2, 4
 
 /*
-	Stored Procedure untuk melakukan UNDO terhadap perubahan id kota
-	Saat ini fitur ini belum berfungsi dengan baik karena masih terkendala dengan beberapa hal
-	@param: -
-	@return: -
-*/
-EXEC undoRegion
-
-/*
-	STORED PROCEDURE untuk memasukkan sebuah investasi
-	Harus terdaftar sebagai klien terlebih dahulu sebelum bisa berinvestasi
-	Apabila id klien tidak terdaftar, maka SP tidak akan mengembalikan apapun.
-	@param idKlien: klien yang ingin melakukan investasi, ID didapat dari masukkan terlebih dahulu orang baru ke tabel klien sehingga akan mendapatkan id Klien nya (int)
-	@param nominal: besaran uang yang ingin diinvestasikan client tersebut (money)
-	@param CS: id CS yang melayani client, setiap CS diasumsikan mengingat id nya masing-masing (int)
-*/
-EXEC investasiInsert 1,50000,1
-
-/*
 	STORED PROCEDURE untuk mengupdate investasi seseorang
 	Syarat: harus pernah melakukan investasi terlebih dahulu
 	Investasi sebelumnya akan di update nilainya jadi investasi yang dimasukin
@@ -159,43 +141,41 @@ EXEC investasiInsert 1,50000,1
 */
 EXEC investasiUpdate 1,100000,1
 
-/*
-	STORED PROCEDURE untuk MENGHAPUS data investasi klien
-	Syarat: harus terdaftar sebagai klien (pernah melakukan investasi)
-	Rencananya hanya akan dipanggil saat klien menghapus data dirinya
-	Sehingga akan dipanggil dari STORED PROCEDURE deleteKlien
-	@param idKlien: id dari klien yang mau dihapus data investasinya
-	@return: tabel yang di log ke history serta tabel investasi yang menunjukkan bahwa investasinya sudah kosong
-*/
-EXEC investasiDelete 1
+-----------------------------------FEATURES-------------------------------------------------------
 
 /*
-	STORED PROCEDURE untuk UNDO operasi investasi
-	Saat ini baru sampai dapat mengembalikan nominal yang salah dimasukkan
+    STORED PROCEDURE untuk mencari klien yang sudah tidak aktif selama tiga bulan lebih
+    Klien yang ditampilkan adalah klien yang berinvestasi tiga bulan yang lalu
+    Program akan mencari klien yang terakhir berinvestasi tiga bulan yang lalu
+    dan akan menampilkan telepon serta alamat emailnya agar perusahaan dapat menghubungi client
+    @param: tidak ada
+    @return: seluruh klien aktif yang sudah tidak melakukan investasi selama tiga bulan terakhir
+    tabel berupa:
+    namaKlien, no HP 1, no HP 2, email, terakhir investasi, lama bulan
+*/
+EXEC cariKlienLebihDariTigaBulan
+
+/*
+	sp yang digunakan untuk membuat laporan rata rata investasi tiap daerah
+	setiap klien akan di masukkan pada region yang terdapat pada leaf
+	sehingga pencarian rata rata ini dilakukan pada semua leaf
+	@param : tidak ada parameter pada sp ini
+	@output : 
+		@namaRegion : merupakan nama tempat seseorang klien
+		@ratarataInvest : merupakan nilai rata-rata invest pada tiap daerah
+		@jumlahKlien : merupakan jumlah klien yang melakukan investasi pada sebuah region
+	SP ini dapat di improve dengan memasukkan parameter waktu jika diinginkan
+	sehingga sp ini dapat mengeluarkan rata rata investasi pada jangka waktu tertentu
+*/
+EXEC averageInvest
+
+/*
+	STORED PROCEDURE untuk Mencari investasi tertinggi dan terendah dari seluruh daerah
 	@param: -
-	@return: saat ini masih belum ada hasil return
+	@return: daerah dan nama klien yang memiliki investasi terbanyak serta nominalnya dan
+	daerah dan nama klien yang memiliki investasi terendah serta nominalnya
 */
-EXEC undoPerubahanInvestasi
-
-/*
-	STORED PRODUCE untuk INSERT data hubungan dari klien
-	Syarat : Harus mendaftar menjadi klien terlebih dahulu 
-	Apabila id klien tidak ada maka harus di insert dulu pada table klien
-	@param idUser : id dari klien yang akan di input hubunganya dengan siapa
-	@param posisi : menunjkkan posisi dalam keluarga (e.g Ibu) dituliskan dalam int
-*/
-
-exec hubunganInsert 3,1
-
-/*
-	STORE PRODUCE untuk DELETE data hubungan dari klien
-	Syarat : harus terdaftar menjadi klien (ada id klien)
-	jika tidak terdaftar menjadi klien maka akan tidak mengembalikan apapaun
-	@param idUser : menghapus hubungan dalam user misalnya user tersebut pindah KK 
-	maka hubungan lama akan di delete dan di insert yang baru
-*/
-
-exec hubunganDelete 1
+EXEC laporanInvestMaxMin
 
 ----------------------------DANGER ZONE--------------------------------------
 
@@ -223,3 +203,72 @@ EXEC undoPerubahanCSTerakhir
 	@return: tabel history yang diundo
 */
 exec undoInvestasi 'bebek','unpar', '1999-05-20', 'bebek@gmail.com'
+
+/*
+	Stored Procedure untuk melakukan UNDO terhadap perubahan id kota
+	Saat ini fitur ini belum berfungsi dengan baik karena masih terkendala dengan beberapa hal
+	@param: -
+	@return: -
+*/
+EXEC undoRegion
+
+--------------------------HANYA DIPANGGIL DARI DALAM SP ------------------------------
+/*
+	STORED PRODUCE untuk INSERT data hubungan dari klien
+	Syarat : Harus mendaftar menjadi klien terlebih dahulu 
+	Apabila id klien tidak ada maka harus di insert dulu pada table klien
+	@param idUser : id dari klien yang akan di input hubunganya dengan siapa
+	@param posisi : menunjkkan posisi dalam keluarga (e.g Ibu) dituliskan dalam int
+	HANYA DIPANGGIL DARI SP KlienInsert (memasukkan seorang klien baru)
+*/
+EXEC hubunganInsert 3,1
+
+/*
+	STORE PRODUCE untuk DELETE data hubungan dari klien
+	Syarat : harus terdaftar menjadi klien (ada id klien)
+	jika tidak terdaftar menjadi klien maka akan tidak mengembalikan apapaun
+	@param idUser : menghapus hubungan dalam user misalnya user tersebut pindah KK 
+	maka hubungan lama akan di delete dan di insert yang baru
+	HANYA DIPANGGIL DARI SP KlienDelete (menonaktifkan klien) / SP KlienUpdate (mengupdate data klien)
+*/
+EXEC hubunganDelete 1
+
+/*
+	Stored Procedure untuk menambahkan sebuah region
+	Suatu region bisa memiliki parent
+	Region yang tidak memiliki parent dapat diisi dengan 0 untuk parent nya.
+	Syarat: id parent harus ada di dalam basis data (kecuali tidak punya daerah, langsung tulis 0 saja)
+	@param namaDaerah: nama daerah yang ingin dimasukkan ke dalam basis data (string) --> penulisan harus pakai ''
+	@param idParent: id daerah yang menjadi parent dari nama daerah baru yang dimasukkan
+	@return: tabel daerah yang baru saja dimasukan serta nama parent nya serta tabel log nya
+	HANYA DIPANGGIL DARI SP KlienInsert (memasukkan seorang klien baru)
+*/
+EXEC insertReg 'Bogor', 0
+
+/*
+	STORED PROCEDURE untuk memasukkan sebuah investasi
+	Harus terdaftar sebagai klien terlebih dahulu sebelum bisa berinvestasi
+	Apabila id klien tidak terdaftar, maka SP tidak akan mengembalikan apapun.
+	@param idKlien: klien yang ingin melakukan investasi, ID didapat dari masukkan terlebih dahulu orang baru ke tabel klien sehingga akan mendapatkan id Klien nya (int)
+	@param nominal: besaran uang yang ingin diinvestasikan client tersebut (money)
+	@param CS: id CS yang melayani client, setiap CS diasumsikan mengingat id nya masing-masing (int)
+	HANYA DIPANGGIL DARI SP KlienInsert (mregionInsert
+/*
+	STORED PROCEDURE untuk MENGHAPUS data investasi klien
+	Syarat: harus terdaftar sebagai klien (pernah melakukan investasi)
+	Rencananya hanya akan dipanggil saat klien menghapus data dirinya
+	Sehingga akan dipanggil dari STORED PROCEDURE deleteKlien
+	@param idKlien: id dari klien yang mau dihapus data investasinya
+	@return: tabel yang di log ke history serta tabel investasi yang menunjukkan bahwa investasinya sudah kosong
+	HANYA DIPANGGIL DARI SP KlienDelete (menonaktifkan seorang klien)
+*/
+EXEC investasiDelete 1
+
+/*
+	STORED PROCEDURE untuk UNDO operasi investasi
+	Saat ini baru sampai dapat mengembalikan nominal yang salah dimasukkan
+	@param: -
+	@return: saat ini masih belum ada hasil return
+	HANYA DIPANGGIL DARI SP undoInvestasi (salah meng update investasi)
+*/
+EXEC undoPerubahanInvestasi
