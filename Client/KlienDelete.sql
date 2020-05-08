@@ -14,7 +14,8 @@ ALTER PROCEDURE KlienDelete(
 	@nama varchar(50),
 	@alamat varchar(50),
 	@tgllahir datetime,
-	@namaRegion varchar(50)
+	@namaRegion varchar(50),
+	@idCs INT
 )
 AS
 	DECLARE 
@@ -159,7 +160,7 @@ AS
 			status = 0
 			WHERE nama = @nama and idK = @idK
 
-			EXEC investasiDelete @idK
+			EXEC investasiDelete @idK,@idCs
 		END
 
 	

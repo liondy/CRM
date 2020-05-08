@@ -1,7 +1,9 @@
 --alamat; fkRegion; fkHubungan; status; email
 ALTER PROCEDURE KlienUpdate
 	@idK int,
-	@perubahan varchar(400)
+	@perubahan varchar(400),
+	@investasi MONEY,
+	@idCs INT
 AS
 	DECLARE
 		@idKlien int
@@ -168,6 +170,24 @@ AS
 		SET @query = CONCAT(@query,' WHERE idK = ',@idK)
 		--SELECT @query
 		EXEC sp_executesql @query
+		DECLARE
+			@nama VARCHAR(50),
+			@alamat VARCHAR(50),
+			@tglLahir DATETIME,
+			@namaRegion VARCHAR(50)
+		
+		SELECT
+			@nama = nama,
+			@alamat = alamat,
+			@tglLahir = tglLahir,
+			@namaRegion = Region.namaKelompok
+		FROM
+			Klien INNER JOIN Region ON
+			Klien.fkRegion = Region.idR
+		WHERE
+			idK = @idK
+
+		EXEC investasiUpdate @nama,@alamat,@tglLahir,@namaRegion,@investasi,@idCs
 	END
 	SELECT
 		*
@@ -183,4 +203,3 @@ AS
 	WHERE
 		idUser = @idK
 GO
-EXEC KlienUpdate 1,'unpar;;;;bebek@gmail.com'

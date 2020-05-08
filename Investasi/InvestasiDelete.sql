@@ -1,5 +1,6 @@
 ALTER PROCEDURE investasiDelete(
-	@idKlien int
+	@idKlien int,
+	@idCs INT
 )
 AS
 	DECLARE @dumpIdK int
@@ -103,9 +104,13 @@ AS
 				@idPerubahan, 'fkCusService','int', @cusSerBefore
 			)
 	
-			UPDATE investasi set
-			nominal = 0
-			WHERE investasi.fkIdKlien = @idKlien
+			UPDATE
+				investasi
+			SET
+				nominal = 0,
+				fkCusService = @idCs
+			WHERE
+				investasi.fkIdKlien = @idKlien
 		END
 	END
 

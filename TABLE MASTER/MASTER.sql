@@ -67,9 +67,11 @@ exec KlienInsert 'macan', 'kembar', '19970101', 'Medan', 'anak pertama', 'macan@
 	Semua value dipisahkan oleh ';'
 	@param idKlien : id dari klien yang ingin diupdate datanya
 	@param perubahan : perubahan-perubahan yang ingin dilakukan dengan format di atas
+	@param investasi : nominal yang ingin dimasukkan untuk di update data investasinya
+	@param id CS : id dari CS yang melayani klien
 	@return data klien baru
 */
-EXEC KlienUpdate 1,'unpar;;;;bebek@gmail.com'
+EXEC KlienUpdate 1,'unpar;;;;bebek@gmail.com',100,1
 
 /*
 	STORE PRODUCE untuk DELETE data klien
