@@ -73,11 +73,13 @@ EXEC KlienUpdate 1,'unpar;;;;bebek@gmail.com'
 	STORE PRODUCE untuk DELETE data klien
 	Syarat : harus terdaftar menjadi klien terlebih dahulu
 	@param nama : nama dari klien yang sudah terdaftar dan mau di hapus
-	@idK  = id dari klien yang mau di hapus
+	@alamat  = alamat dari klien yang sudah terdaftar saat awal
+	@tglLahir : tgl lahir klien yang ingin dihapus
+	@namaRegion : nama daerah klien tinggal
 	menggunakan nama dan id agar meminimalisir kesalahan dalam input
 */
 
-exec KlienDelete 'Asep', 5
+exec KlienDelete 'macan', 'kembar','19970101','Medan'
 
 /*
 	Stored Procedure untuk memasukkan no HP seorang klien

@@ -11,8 +11,10 @@
 	sesuatu yang unik, misal idK atau idKK klien tersebut.
 */
 ALTER PROCEDURE KlienDelete(
-	@nama VARCHAR(50), 
-	@idK int
+	@nama varchar(50),
+	@alamat varchar(50),
+	@tgllahir datetime,
+	@namaRegion varchar(50)
 )
 AS
 	DECLARE 
@@ -28,18 +30,28 @@ AS
 		@idPerubahan INT,
 		@idPerubahanHub INT,
 		@posisi varchar(20),
-		@cek INT
+		@idK INT
 
 	SET @curDateTime = GETDATE()
 	
 	select
-		@cek = idK
+		@idK = idK
 	from
 		klien
 	where 
-		nama = @nama and idK = @idK 
+		nama = @nama and 
+		alamat = @alamat AND
+		tglLahir = @tglLahir AND
+		fkRegion = (
+			SELECT
+				DISTINCT(idR)
+			FROM
+				Region
+			WHERE
+				namaKelompok = @namaRegion
+		)
 	
-	if(@cek is not null)
+	if(@idK is not null)
 		BEGIN
 			Set @idKK = (
 				SELECT	
@@ -146,6 +158,8 @@ AS
 			UPDATE klien set
 			status = 0
 			WHERE nama = @nama and idK = @idK
+
+			EXEC investasiDelete @idK
 		END
 
 	
@@ -170,9 +184,4 @@ AS
 		kolom,
 		nilaiSebelum AS 'Data klien Sebelum'
 	FROM history where kolom = 'nama'  
-	go
-	exec KlienDelete 'tine', 14
-
-
-	
-
+	GO
