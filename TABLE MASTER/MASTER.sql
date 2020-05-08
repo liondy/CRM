@@ -229,7 +229,7 @@ EXEC hubunganInsert 3,1
 	jika tidak terdaftar menjadi klien maka akan tidak mengembalikan apapaun
 	@param idUser : menghapus hubungan dalam user misalnya user tersebut pindah KK 
 	maka hubungan lama akan di delete dan di insert yang baru
-	HANYA DIPANGGIL DARI SP KlienDelete (menonaktifkan klien) / SP KlienUpdate (mengupdate data klien)
+	HANYA DIPANGGIL DARI SP KlienUpdate (mengupdate data klien)
 */
 EXEC hubunganDelete 1
 

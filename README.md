@@ -28,7 +28,6 @@ HubunganDelete hanya dipanggil apabila seseorang sudah pindah kartu keluarga (mi
 
 - KlienDelete.sql <br>
 Untuk mengubah data klien menjadi tidak aktif lagi (misal berhenti berinvestasi atau meninggal) <br>
-Memanggil SP hubunganDelete
 
 ## Customer Service
 - CSUpdate.sql <br>
