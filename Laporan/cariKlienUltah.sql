@@ -12,6 +12,7 @@ as
 	declare @tableBirthday table(
 		nama varchar(50),
 		alamat varchar(50),
+		namaDaerah varchar(50),
 		email varchar(50)
 	)
 
@@ -31,9 +32,10 @@ BEGIN
 		begin
 			insert into @tableBirthday
 			select
-				nama,alamat,email
+				nama,alamat,region.namaKelompok,email
 			from
-				klien
+				klien join region on
+					klien.fkRegion = region.idR
 			where
 				DATEPART(dd, tglLahir) = DATEPART(dd,@curDate) and
 				DATEPART(mm, klien.tglLahir) = DATEPART(mm, @curDate)
@@ -44,9 +46,10 @@ BEGIN
 			begin
 				insert into @tableBirthday
 				select
-					nama,alamat,email
+					nama,alamat,region.namaKelompok,email
 				from
-					klien
+					klien join region on
+						klien.fkRegion = region.idR
 				where
 					DATEPART(mm, klien.tglLahir) = DATEPART(mm, @curDate) and
 					(DATEPART(dd, tglLahir) >= DATEPART(dd,@curDate) and
@@ -57,9 +60,10 @@ BEGIN
 			begin
 				insert into @tableBirthday
 				select
-					nama,alamat,email
+					nama,alamat,region.namaKelompok, email
 				from
-					klien
+					klien join region on
+						klien.fkRegion = region.idR
 				where
 					DATEPART(dd, tglLahir) >= DATEPART(dd,@curDate) and
 					DATEPART(mm, klien.tglLahir) = DATEPART(mm, @curDate) and
@@ -70,9 +74,10 @@ BEGIN
 		begin
 			insert into @tableBirthday
 				select
-					nama,alamat,email
+					nama,alamat,region.namaKelompok, email
 				from
-					klien
+					klien join region on
+						klien.fkRegion = region.idR
 				where
 					DATEPART(mm, klien.tglLahir) = DATEPART(mm, @curDate)
 		end
