@@ -91,8 +91,20 @@ Apabila ingin mengganti nomor telepon, dapat dilakukan dengan cara menghapus nom
 - averageInvest.sql <br>
 Mencari rata-rata investasi klien dari semua daerah <br>
 
+- averageInvestByTime.sql <br>
+Membuat laporan rata rata investasi tiap daerah pada rentang waktu tertentu
+
+- cariKlienInvestasiDiatasRatarata.sql <br>
+Mencari klien yang melakukan investasi di atas rata-rata daerahnya
+
+- cariKlienNominalTertentu.sql <br>
+Mencari klien yang berinvestasi di atas suatu nominal tertentu
+
 - laporanInvestMaxMin.sql <br>
 Mencari investasi tertinggi dan terendah dari seluruh daerah
+
+- cariKlienUltah.sql <br>
+Mencari klien yang sedang berulang tahun hari ini, minggu ini atau bulan ini
 
 - cariKlienSudahLamaTidakInvestasi <br>
 Mencari klien yang sudah lama tidak melakukan investasi (terakhir lebih dari tiga bulan yang lalu) agar dapat dihubungi oleh pihak perusahaan agar melakukan investasi kembali. Ini berguna untuk menjaga relasi antara klien dan perusahaan
