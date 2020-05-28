@@ -3,3 +3,4 @@ EXEC reset
 
 --add data for first day
 EXEC Tgl1
+-- EXEC Tgl4
