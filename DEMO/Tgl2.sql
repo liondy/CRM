@@ -19,7 +19,7 @@ AS
 	UPDATE perubahan SET waktu = '20200102 10:00:00 AM' WHERE idRecord = 5 AND tabel = 'klien' AND operasi = 'INSERT'
 
 
-	EXEC investasiUpdate 'Rose','cemara','19701210','Bandung',250000,3
+	EXEC investasiUpdate 'Rose','cemara','19700610','Bandung',250000,3
 	UPDATE perubahan SET waktu = '20200102 10:10:00 AM' WHERE idRecord = 4 AND tabel = 'investasi' AND operasi = 'UPDATE'
 	UPDATE investasi SET waktu ='20200102 10:10:00 AM' WHERE fkIdKlien = 4
 

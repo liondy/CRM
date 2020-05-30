@@ -6,7 +6,7 @@ AS
 	EXEC undoRegion 'Tanggerang',6
 	UPDATE perubahan SET waktu = '20200105 09:05:00 AM' WHERE idRecord=20 AND tabel ='Region' AND operasi='UNDO'
 
-	EXEC undoInvestasi 'Ipin','rancabulan','19951020','ipinpin@gmail.com'
+	EXEC undoInvestasi 'Ipin','rancabulan','19950620','ipinpin@gmail.com'
 	UPDATE perubahan SET waktu = '20200105 10:32:00 AM' WHERE idRecord=3 AND tabel='investasi' AND operasi='UNDO'
 
 	EXEC investasiUpdate 'Meimei','rancabulan','19960602','Cimahi',500000,3
