@@ -1,7 +1,7 @@
 ALTER PROCEDURE Tgl4
 AS
     EXEC investasiUpdate 'Udin','cemara','19680602','Bandung',250000,1
-    UPDATE perubahan SET waktu='20200104 09:23:00 AM' WHERE idRecord = 1 and tabel='investasi' and operasi='UPDATE'
+    UPDATE perubahan SET waktu='20200104 09:23:00 AM' WHERE idPe = 55
     UPDATE investasi SET waktu='20200104 09:23:00 AM' WHERE fkIdKlien = 1
 
     EXEC KlienInsert 'Jarjat', 'cemara', '19980211', 'Bandung', 'anak kedua', 'jarjat@yahoo.com', 500000, 3
@@ -16,11 +16,11 @@ AS
     UPDATE Perubahan SET waktu = '20200104 09:34:00 AM' WHERE idRecord = 19 AND tabel = 'Region' and operasi = 'INSERT'
 
     EXEC investasiUpdate 'Ipin','rancabulan','19951020','Cimahi',250000,2
-    UPDATE perubahan SET waktu='20200104 10:32:00 AM' WHERE idRecord = 3 and tabel='investasi' and operasi='UPDATE'
+    UPDATE perubahan SET waktu='20200104 10:32:00 AM' WHERE idPe = 60
     UPDATE investasi SET waktu='20200104 10:32:00 AM' WHERE fkIdKlien = 3
 
-    EXEC investasiUpdate 'Rose','cemara','19701210','Bandung',400000,1
-    UPDATE perubahan SET waktu='20200104 11:07:00 AM' WHERE idRecord = 5 and tabel='investasi' and operasi='UPDATE'
+    EXEC investasiUpdate 'Jarjit','cemara','19951217','Bandung',400000,1
+    UPDATE perubahan SET waktu='20200104 11:07:00 AM' WHERE idPe = 61
     UPDATE investasi SET waktu='20200104 11:07:00 AM' WHERE fkIdKlien = 5
 
     EXEC insertRegion 'Banten','Indonesia'
