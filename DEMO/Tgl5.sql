@@ -1,10 +1,10 @@
-CREATE PROCEDURE Tgl5
+ALTER PROCEDURE Tgl5
 AS
-	EXEC updateReg'Tanggerang','Banten','DKI Jakarta'
-	UPDATE perubahan SET waktu = '20200105 09:00:00 AM' WHERE idRecord=21 AND tabel ='Region' AND operasi='UPDATE'
+	EXEC updateReg 'Tanggerang',19,6
+	UPDATE perubahan SET waktu = '20200105 09:00:00 AM' WHERE idRecord=20 AND tabel ='Region' AND operasi='UPDATE'
 
 	EXEC undoRegion 'Tanggerang',6
-	UPDATE perubahan SET waktu = '20200105 09:05:00 AM' WHERE idRecord=21 AND tabel ='Region' AND operasi='UNDO'
+	UPDATE perubahan SET waktu = '20200105 09:05:00 AM' WHERE idRecord=20 AND tabel ='Region' AND operasi='UNDO'
 
 	EXEC undoInvestasi 'Ipin','rancabulan','19951020','ipinpin@gmail.com'
 	UPDATE perubahan SET waktu = '20200105 10:32:00 AM' WHERE idRecord=3 AND tabel='investasi' AND operasi='UNDO'
@@ -21,5 +21,5 @@ AS
 
 	EXEC investasiUpdate 'Udin','cemara','19680602','Bandung',500000,1
 	UPDATE investasi SET waktu ='20200105 13:45:00' WHERE fkIdKlien=1
-	UPDATE perubahan SET waktu ='20200105 13:45:00' WHERE idPe = 72
+	UPDATE perubahan SET waktu ='20200105 13:45:00' WHERE idPe = 73
 GO
