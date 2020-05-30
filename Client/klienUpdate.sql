@@ -118,8 +118,6 @@ AS
 						MAX(idKK) + 1
 					FROM
 						Hubungan
-					WHERE
-						idUser = @idK
 				)
 				SET @query = CONCAT(@query,'fkHubungan = ''',@fkHubungan,''', ')
 				SET @nilaiSebelum = (
