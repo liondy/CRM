@@ -1,4 +1,4 @@
-CREATE PROCEDURE Tgl2
+ALTER PROCEDURE Tgl2
 AS
 	EXEC investasiUpdate 'Udin','cemara','19680602','Bandung',150000,3
 	UPDATE perubahan SET waktu ='20200102 09:30:00 AM' WHERE idRecord = 1 AND tabel = 'investasi' AND operasi = 'UPDATE'
@@ -20,7 +20,7 @@ AS
 
 
 	EXEC investasiUpdate 'Rose','cemara','19701210','Bandung',250000,3
-	UPDATE perubahan SET waktu = '20200102 10:10:00 AM' WHERE idRecord = 4 AND tabel = 'investasi'
+	UPDATE perubahan SET waktu = '20200102 10:10:00 AM' WHERE idRecord = 4 AND tabel = 'investasi' AND operasi = 'UPDATE'
 	UPDATE investasi SET waktu ='20200102 10:10:00 AM' WHERE fkIdKlien = 4
 
 	EXEC KlienInsert 'Mail', 'batikayu', '19930704', 'Jakarta Selatan', 'anak pertama', 'mail@yahoo.com', 300000, 1
