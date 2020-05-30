@@ -32,9 +32,9 @@ AS
 
     EXEC KlienDelete  'Rose','cemara','19701210','Bandung',3
 	update investasi set waktu = '20200604 13:40:00' where fkIdKlien = 4
-    UPDATE perubahan SET waktu='20200604 13:40:00' WHERE idRecord=4 and tabel = 'hubungan' and operasi='DELETE'
-	UPDATE perubahan SET waktu='20200604 13:40:00' WHERE idRecord=4 and tabel = 'investasi' and operasi='DELETE'
-	UPDATE perubahan SET waktu='20200604 13:40:00' WHERE idRecord=4 and tabel = 'klien' and operasi='DELETE'
+    UPDATE perubahan SET waktu='20200104 13:40:00' WHERE idRecord=4 and tabel = 'hubungan' and operasi='DELETE'
+	UPDATE perubahan SET waktu='20200104 13:40:00' WHERE idRecord=4 and tabel = 'investasi' and operasi='DELETE'
+	UPDATE perubahan SET waktu='20200104 13:40:00' WHERE idRecord=4 and tabel = 'klien' and operasi='DELETE'
 
     EXEC insertRegion 'Tanggerang','Banten'
     UPDATE Perubahan SET waktu = '20200104 13:43:00' WHERE idRecord = 21 AND tabel = 'Region' and operasi = 'INSERT'
