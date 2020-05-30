@@ -4,7 +4,7 @@ AS
     UPDATE Perubahan SET waktu = '20200103 10:10:07 AM' where idRecord = 3 AND tabel = 'investasi' and operasi = 'UPDATE'
     UPDATE investasi SET waktu = '20200103 10:10:07 AM' where fkIdKlien = 3
 
-    exec KlienInsert 'Meimei', 'rancabulan', '19960702', 'Cimahi', 'anak kedua', 'meimei@unpar.ac.id', 350000, 2
+    exec KlienInsert 'Meimei', 'rancabulan', '19960602', 'Cimahi', 'anak kedua', 'meimei@unpar.ac.id', 350000, 2
     EXEC noHPInsert 7,'08555556789'
     EXEC noHPInsert 7,'08123411789'
     UPDATE Perubahan SET waktu = '20200103 10:20:20 AM' where idRecord = 20  AND tabel = 'klien' AND operasi = 'INSERT'
