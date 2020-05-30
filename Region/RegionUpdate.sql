@@ -64,8 +64,6 @@ as
 			)
 			*/
 
-			SELECT @idRegion
-
 			INSERT INTO perubahan(
 				waktu, idRecord, operasi, tabel 
 			)
