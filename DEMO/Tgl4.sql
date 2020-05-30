@@ -1,4 +1,4 @@
-CREATE PROCEDURE Tgl4
+ALTER PROCEDURE Tgl4
 AS
     EXEC investasiUpdate 'Udin','cemara','19680602','Bandung',250000,1
     UPDATE perubahan SET waktu='20200104 09:23:00 AM' WHERE idRecord = 1 and tabel='investasi' and operasi='UPDATE'
@@ -23,7 +23,7 @@ AS
     UPDATE perubahan SET waktu='20200104 11:07:00 AM' WHERE idRecord = 5 and tabel='investasi' and operasi='UPDATE'
     UPDATE investasi SET waktu='20200104 11:07:00 AM' WHERE fkIdKlien = 5
 
-    EXEC insertRegion 'Banten',' Indonesia'
+    EXEC insertRegion 'Banten','Indonesia'
     UPDATE Perubahan SET waktu = '20200104 13:10:00' WHERE idRecord = 20 AND tabel = 'Region' and operasi='INSERT'
 
     EXEC investasiUpdate 'Mail','batikayu','19930704','Jakarta Selatan',500000,2
@@ -36,6 +36,6 @@ AS
 	UPDATE perubahan SET waktu='20200604 13:40:00' WHERE idRecord=4 and tabel = 'investasi' and operasi='DELETE'
 	UPDATE perubahan SET waktu='20200604 13:40:00' WHERE idRecord=4 and tabel = 'klien' and operasi='DELETE'
 
-    EXEC insertRegion 'Tanggerang',' Banten'
-    UPDATE Perubahan SET waktu = '20200104 13:43:00' WHERE idRecord = 21 AND tabel = 'Region' and operasi = 'UPDATE'
+    EXEC insertRegion 'Tanggerang','Banten'
+    UPDATE Perubahan SET waktu = '20200104 13:43:00' WHERE idRecord = 21 AND tabel = 'Region' and operasi = 'INSERT'
 GO
