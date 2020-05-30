@@ -1,6 +1,6 @@
-CREATE PROCEDURE Tgl5
+alter PROCEDURE Tgl5
 AS
-	EXEC updateReg'Tanggerang','Banten','DKI Jakarta'
+	EXEC updateReg 'Tanggerang', 20, 6
 	UPDATE perubahan SET waktu = '20200105 09:00:00 AM' WHERE idRecord=21 AND tabel ='Region' AND operasi='UPDATE'
 
 	EXEC undoRegion 'Tanggerang',6
