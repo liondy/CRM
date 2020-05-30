@@ -95,7 +95,7 @@ AS
 				FROM
 					Perubahan
 				WHERE
-					waktu= @curDateTime AND tabel = 'klien'
+					idRecord= @idK AND tabel = 'klien' and operasi='DELETE'
 			)
 			
 			SET @idPerubahanHub = (
@@ -104,7 +104,7 @@ AS
 				FROM
 					perubahan
 				WHERE
-					idRecord = @idRecordHub AND tabel = 'hubungan'
+					idRecord = @idRecordHub AND tabel = 'hubungan' and operasi='DELETE'
 			)
 
 			select
