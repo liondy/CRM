@@ -27,14 +27,14 @@ AS
 	UPDATE perubahan SET waktu ='20200102 11:55:00 AM' WHERE idRecord = 25 AND tabel = 'Region' 
 
 	EXEC KlienDelete 'Mail','batikayu','19930704','Jakarta Selatan',2
-	UPDATE investasi SET waktu ='20200107 13:30:00 AM' WHERE fkIdKlien = 6
-	UPDATE perubahan SET waktu ='20200107 13:30:00 AM' WHERE idRecord = 6 AND tabel = 'hubungan' AND operasi = 'DELETE'
-	UPDATE perubahan SET waktu ='20200107 13:30:00 AM' WHERE idRecord = 6 AND tabel = 'investasi' AND operasi = 'DELETE'
-	UPDATE perubahan SET waktu ='20200107 13:30:00 AM' WHERE idRecord = 6 AND tabel = 'klien' AND operasi = 'DELETE'
+	UPDATE investasi SET waktu ='20200107 13:30:00' WHERE fkIdKlien = 6
+	UPDATE perubahan SET waktu ='20200107 13:30:00' WHERE idRecord = 6 AND tabel = 'hubungan' AND operasi = 'DELETE'
+	UPDATE perubahan SET waktu ='20200107 13:30:00' WHERE idRecord = 6 AND tabel = 'investasi' AND operasi = 'DELETE'
+	UPDATE perubahan SET waktu ='20200107 13:30:00' WHERE idRecord = 6 AND tabel = 'klien' AND operasi = 'DELETE'
 
 	EXEC KlienDelete 'Rose','cemara','19701210','Bandung',3
-	UPDATE investasi SET waktu ='20200107 13:45:00 AM' WHERE fkIdKlien = 4
-	UPDATE perubahan SET waktu ='20200107 13:45:00 AM' WHERE idRecord = 4 AND tabel = 'hubungan' AND operasi = 'DELETE'
-	UPDATE perubahan SET waktu ='20200107 13:45:00 AM' WHERE idRecord = 4 AND tabel = 'investasi' AND operasi = 'DELETE'
-	UPDATE perubahan SET waktu ='20200107 13:45:00 AM' WHERE idRecord = 4 AND tabel = 'klien' AND operasi = 'DELETE'
+	UPDATE investasi SET waktu ='20200107 13:45:00' WHERE fkIdKlien = 4
+	UPDATE perubahan SET waktu ='20200107 13:45:00' WHERE idRecord = 4 AND tabel = 'hubungan' AND operasi = 'DELETE'
+	UPDATE perubahan SET waktu ='20200107 13:45:00' WHERE idRecord = 4 AND tabel = 'investasi' AND operasi = 'DELETE'
+	UPDATE perubahan SET waktu ='20200107 13:45:00' WHERE idRecord = 4 AND tabel = 'klien' AND operasi = 'DELETE'
 GO
