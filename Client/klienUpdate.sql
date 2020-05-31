@@ -119,6 +119,11 @@ AS
 					FROM
 						Hubungan
 				)
+				INSERT INTO Hubungan (idKK,idUser,posisi)
+				SELECT
+					@fkHubungan,
+					@idKlien,
+					@trimKata
 				SET @query = CONCAT(@query,'fkHubungan = ''',@fkHubungan,''', ')
 				SET @nilaiSebelum = (
 					SELECT

@@ -10,7 +10,7 @@ AS
 	UPDATE perubahan SET waktu ='20200107 11:10:00 AM' WHERE idRecord = 8 AND tabel = 'investasi' AND operasi = 'DELETE'
 	UPDATE perubahan SET waktu ='20200107 11:10:00 AM' WHERE idRecord = 8 AND tabel = 'klien' AND operasi = 'DELETE'
 
-	EXEC KlienUpdate 5,';;ayah;;',500000,2
+	EXEC KlienUpdate 5,'sukamanis;;ayah;;',500000,2
 	UPDATE Perubahan SET waktu = '20200107 11:30:11 AM' where idPe = 83 AND tabel = 'Klien' and operasi = 'UPDATE'
     UPDATE Perubahan SET waktu = '20200107 11:30:11 AM' where idPe = 84 AND tabel = 'hubungan' and operasi = 'DELETE'
     UPDATE Perubahan SET waktu = '20200107 11:30:11 AM' where idPe = 85 AND tabel = 'investasi' and operasi = 'UPDATE'
