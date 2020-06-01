@@ -38,7 +38,8 @@ BEGIN
 					klien.fkRegion = region.idR
 			where
 				DATEPART(dd, tglLahir) = DATEPART(dd,@curDate) and
-				DATEPART(mm, klien.tglLahir) = DATEPART(mm, @curDate)
+				DATEPART(mm, klien.tglLahir) = DATEPART(mm, @curDate) and
+				klien.status = 1
 		end
 	else if(@perintah = 2)
 		begin
@@ -51,6 +52,7 @@ BEGIN
 					klien join region on
 						klien.fkRegion = region.idR
 				where
+					klien.status = 1 and
 					DATEPART(mm, klien.tglLahir) = DATEPART(mm, @curDate) and
 					(DATEPART(dd, tglLahir) >= DATEPART(dd,@curDate) and
 					DATEPART(dd, tglLahir) <= DATEPART(dd,DATEADD(DAY,@counter,@curDate)))
@@ -65,6 +67,7 @@ BEGIN
 					klien join region on
 						klien.fkRegion = region.idR
 				where
+					klien.status = 1 and
 					DATEPART(dd, tglLahir) >= DATEPART(dd,@curDate) and
 					DATEPART(mm, klien.tglLahir) = DATEPART(mm, @curDate) and
 					DATEPART(dd, tglLahir) <= DATEADD(DAY,7,@curDate)
@@ -79,6 +82,7 @@ BEGIN
 					klien join region on
 						klien.fkRegion = region.idR
 				where
+					klien.status = 1 and
 					DATEPART(mm, klien.tglLahir) = DATEPART(mm, @curDate)
 		end
 END
