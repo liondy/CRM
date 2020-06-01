@@ -1,4 +1,4 @@
-CREATE PROCEDURE Tgl1
+ALTER PROCEDURE Tgl1
 AS
     EXEC updateCustomerService 'Tom','tambah'
     UPDATE Perubahan SET waktu = '20200101 07:00:00 AM' WHERE idRecord = 1 AND tabel = 'CusService'
@@ -55,7 +55,7 @@ AS
     UPDATE Perubahan SET waktu = '20200101 09:20:00 AM' WHERE idRecord = 2 AND tabel = 'investasi' AND operasi = 'INSERT'
     UPDATE Perubahan SET waktu = '20200101 09:20:00 AM' WHERE idRecord = 2 AND tabel = 'klien' AND operasi = 'INSERT'
 
-    exec KlienInsert 'Ipin', 'rancabulan', '19951020', 'Cimahi', 'ibu', 'ipinpin@gmail.com', 150000, 2
+    exec KlienInsert 'Ipin', 'rancabulan', '19950620', 'Cimahi', 'ibu', 'ipinpin@gmail.com', 150000, 2
     EXEC noHPInsert 3,'08124556789'
     EXEC noHPInsert 3,'08177456789'
     UPDATE investasi SET waktu = '20200101 10:10:00 AM' WHERE idIvest = 3
@@ -63,7 +63,7 @@ AS
     UPDATE Perubahan SET waktu = '20200101 10:10:00 AM' WHERE idRecord = 3 AND tabel = 'investasi' AND operasi = 'INSERT'
     UPDATE Perubahan SET waktu = '20200101 10:10:00 AM' WHERE idRecord = 3 AND tabel = 'klien' AND operasi = 'INSERT'
 
-    exec KlienInsert 'Rose', 'cemara', '19701210', 'Bandung', 'ibu', 'rose@gmail.com', 50000, 2
+    exec KlienInsert 'Rose', 'cemara', '19700610', 'Bandung', 'ibu', 'rose@gmail.com', 50000, 2
     EXEC noHPInsert 4,'08237856789'
     EXEC noHPInsert 4,'08123456755'
     UPDATE investasi SET waktu = '20200101 11:00:00 AM' WHERE idIvest = 4

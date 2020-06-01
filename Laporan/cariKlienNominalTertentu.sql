@@ -49,7 +49,13 @@ begin
 								region r1 left join region r2 on
 									r1.idR = r2.idParent
 							where
-								r1.idR = 1 and r2.idParent is not null
+								r1.idR = @idR and r2.idParent is not null
+					end
+				ELSE
+					BEGIN
+						insert into @tableLeaf
+							select
+								@idR
 					end
 				end
 			else
@@ -126,4 +132,4 @@ begin
 end
 go
 
-exec cariKlienInvestDiatasNominal 'indonesia',1
+exec cariKlienInvestDiatasNominal 'Bandung',100000

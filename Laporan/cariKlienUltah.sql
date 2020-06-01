@@ -11,6 +11,7 @@ alter procedure findBirthday(
 as
 	declare @tableBirthday table(
 		nama varchar(50),
+		tglLahir date,
 		alamat varchar(50),
 		namaDaerah varchar(50),
 		email varchar(50)
@@ -21,18 +22,18 @@ as
 	declare	@counter int
 
 	set @curDate = CONVERT(DATE, GETDATE())
+	--set @curDate = '20200602'
 	set datefirst 1
-	set @curDay = datepart(dw,getdate())
+	set @curDay = datepart(dw,@curDate)
 	-- 1=senin, 2=selasa, 3=rabu, 4=kamis, 5=jumat, 6=sabtu, 7=minggu 
-
 	set @counter = 7 - @curDay
-
+	
 BEGIN
 	if(@perintah = 1)
 		begin
 			insert into @tableBirthday
 			select
-				nama,alamat,region.namaKelompok,email
+				nama,tglLahir,alamat,region.namaKelompok,email
 			from
 				klien join region on
 					klien.fkRegion = region.idR
@@ -47,7 +48,7 @@ BEGIN
 			begin
 				insert into @tableBirthday
 				select
-					nama,alamat,region.namaKelompok,email
+					nama,tglLahir,alamat,region.namaKelompok,email
 				from
 					klien join region on
 						klien.fkRegion = region.idR
@@ -62,7 +63,7 @@ BEGIN
 			begin
 				insert into @tableBirthday
 				select
-					nama,alamat,region.namaKelompok, email
+					nama,tglLahir,alamat,region.namaKelompok, email
 				from
 					klien join region on
 						klien.fkRegion = region.idR
@@ -77,7 +78,7 @@ BEGIN
 		begin
 			insert into @tableBirthday
 				select
-					nama,alamat,region.namaKelompok, email
+					nama,tglLahir,alamat,region.namaKelompok, email
 				from
 					klien join region on
 						klien.fkRegion = region.idR

@@ -1,6 +1,6 @@
-CREATE PROCEDURE Tgl6
+ALTER PROCEDURE Tgl6
 AS
-    EXEC KlienUpdate 9,';;ibu;;', 600000, 1
+    EXEC KlienUpdate 9,'sukaasin;;ibu;;', 600000, 1
     UPDATE Perubahan SET waktu = '20200106 11:11:11 AM' where idPe = 74  AND tabel = 'Klien' and operasi = 'UPDATE'
     UPDATE Perubahan SET waktu = '20200106 11:11:11 AM' where idPe = 75  AND tabel = 'hubungan' and operasi = 'DELETE'
     UPDATE Perubahan SET waktu = '20200106 11:11:11 AM' where idPe = 76  AND tabel = 'investasi' and operasi = 'UPDATE'

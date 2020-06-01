@@ -8,7 +8,7 @@
     tabel berupa:
     namaKlien, no HP 1, no HP 2, email, terakhir investasi, lama bulan
 */
-CREATE PROCEDURE cariKlienSudahLamaTidakInvestasi
+ALTER PROCEDURE cariKlienSudahLamaTidakInvestasi
 AS
     DECLARE @tbResult TABLE(
         Nama VARCHAR(50),
@@ -40,7 +40,7 @@ AS
             Klien.nama,
             Klien.email,
             waktu AS 'Investasi Terakhir',
-            DATEDIFF(MONTH,@curDate,waktu) AS 'LamaBulan'
+            DATEDIFF(MONTH,waktu,@curDate) AS 'LamaBulan'
         FROM
             Investasi INNER JOIN Klien ON
             Investasi.fkIdKlien = Klien.idK
@@ -50,9 +50,9 @@ AS
         GROUP BY
             klien.idK,klien.nama,klien.email,waktu
         HAVING
-            DATEDIFF(MONTH,@curDate,waktu) > 3
+            DATEDIFF(MONTH,waktu,@curDate) > 3
         ORDER BY
-            DATEDIFF(MONTH,@curDate,waktu) DESC
+            DATEDIFF(MONTH,waktu,@curDate) DESC
     
     OPEN itKlien
     FETCH NEXT FROM

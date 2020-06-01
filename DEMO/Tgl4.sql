@@ -15,7 +15,7 @@ AS
     EXEC insertRegion 'Depok','Jawa Barat'
     UPDATE Perubahan SET waktu = '20200104 09:34:00 AM' WHERE idRecord = 19 AND tabel = 'Region' and operasi = 'INSERT'
 
-    EXEC investasiUpdate 'Ipin','rancabulan','19951020','Cimahi',250000,2
+    EXEC investasiUpdate 'Ipin','rancabulan','19950620','Cimahi',250000,2
     UPDATE perubahan SET waktu='20200104 10:32:00 AM' WHERE idPe = 60
     UPDATE investasi SET waktu='20200104 10:32:00 AM' WHERE fkIdKlien = 3
 
@@ -30,7 +30,7 @@ AS
     UPDATE perubahan SET waktu='20200104 13:30:00' WHERE idRecord = 6 and tabel='investasi' and operasi='UPDATE'
     UPDATE investasi SET waktu='20200104 13:30:00' WHERE fkIdKlien = 6
 
-    EXEC KlienDelete  'Rose','cemara','19701210','Bandung',3
+    EXEC KlienDelete  'Rose','cemara','19700610','Bandung',3
 	update investasi set waktu = '20200604 13:40:00' where fkIdKlien = 4
     UPDATE perubahan SET waktu='20200104 13:40:00' WHERE idRecord=4 and tabel = 'hubungan' and operasi='DELETE'
 	UPDATE perubahan SET waktu='20200104 13:40:00' WHERE idRecord=4 and tabel = 'investasi' and operasi='DELETE'
